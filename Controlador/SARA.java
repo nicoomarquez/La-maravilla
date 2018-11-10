@@ -11,12 +11,12 @@ private Vector<Boleta> boletas;
 private Vector<Cliente> clientes;
 private Administrador administrador;
 
-	private SARA(String us, String pass) {
+	private SARA() {
 		// TODO Auto-generated constructor stub
-		empleados=	new Vector<Empleado>();
+		empleados =	new Vector<Empleado>();
 		boletas  =	new Vector<Boleta>();
 		clientes =	new Vector<Cliente>();
-		administrador= new Administrador(us,pass);
+		administrador = new Administrador();
 	}
 
 	public Vector<Empleado> getEmpleados() {
@@ -52,13 +52,18 @@ private Administrador administrador;
 	}
 
 	public static SARA getInstancia(String us, String pass) {
-		if(instancia==null)
-			instancia=new SARA(us,pass);
-		return instancia;
+		Administrador admin = new Administrador();
+		if(admin.getNombreUsuario().equalsIgnoreCase(us) && admin.getContrasenia().equalsIgnoreCase(pass)){
+			if(instancia == null)
+				instancia=new SARA();
+			return instancia;
+		}
+		else
+			return null;
 	}
 	
 	public static SARA getInstancia(){
 		return instancia;
 	}
-
+	
 }

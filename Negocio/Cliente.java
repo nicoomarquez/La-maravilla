@@ -3,18 +3,27 @@ package Negocio;
 import java.util.Vector;
 
 public class Cliente extends Usuario{
+	private static int idCliente;
 	private String codigoPostal, mail;
 	private boolean estado;
 
 	public Cliente(String nombre, String apellido, String domicilio, 
 			String dni, String localidad,String codigoPostal, String mail) {
 		super(nombre, apellido, domicilio, dni, localidad);
-		// TODO Auto-generated constructor stub
+		idCliente=getProxNumCliente();
 		this.codigoPostal=codigoPostal;
 		this.mail=mail;
 		this.estado=true; //cuando se da de alta un usuario siempre estara activo
 	}
 
+	private int getProxNumCliente() {
+		// TODO Auto-generated method stub
+		return ++idCliente;
+	}
+
+	public int getIdCliente(){
+		return idCliente;
+	}
 	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}
@@ -44,9 +53,7 @@ public class Cliente extends Usuario{
 	}
 
 	@Override
-	public Object insert(Object o) {
-		// TODO Auto-generated method stub
-		return null;
+	public void insert(Object o) {
 	}
 
 	@Override

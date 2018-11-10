@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.Vector;
 
 public class Boleta {
-	private int idBoleto;
+	private int idBoleta;
 	private Cliente cliente;
 	private float total, seña;
 	private Date fecha;
@@ -17,10 +17,10 @@ public class Boleta {
 		calzados= new Vector<Calzado>();
 	}
 
-	public Boleta(int idBoleto, Cliente cliente, float total, float seña, Date fecha, Vector<Calzado> calzados,
+	public Boleta(int idBoleta, Cliente cliente, float total, float seña, Date fecha, Vector<Calzado> calzados,
 			char estado) {
 		super();
-		this.idBoleto = idBoleto;
+		this.idBoleta = idBoleta;
 		this.cliente = cliente;
 		this.total = total;
 		this.seña = seña;
@@ -31,12 +31,12 @@ public class Boleta {
 		//insert en DB
 	}
 
-	public int getIdBoleto() {
-		return idBoleto;
+	public int getIdBoleta() {
+		return idBoleta;
 	}
 
-	public void setIdBoleto(int idBoleto) {
-		this.idBoleto = idBoleto;
+	public void setIdBoleta(int idBoleta) {
+		this.idBoleta = idBoleta;
 	}
 
 	public Cliente getCliente() {
@@ -86,9 +86,6 @@ public class Boleta {
 	public void setEstado(char estado) {
 		this.estado = estado;
 	}
-	
-	
-	
 	
 
 }

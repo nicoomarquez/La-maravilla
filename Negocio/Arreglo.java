@@ -1,31 +1,45 @@
 package Negocio;
 
 public class Arreglo {
-	private int idArreglo;
+	private static int idArreglo;
+	private String nombre;
 	private String descripcion;
 	private float costoArreglo;
 	
 	public Arreglo(){
 		idArreglo=0;
+		nombre="";
 		descripcion="";
 		costoArreglo=0f;
 	}
 
-	public Arreglo(int idArreglo, String descripcion, float costoArreglo) {
+	public Arreglo(String nombre, String descripcion, float costoArreglo) {
 		super();
-		this.idArreglo = idArreglo;
+		idArreglo = getProxNumArreglo();
+		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.costoArreglo = costoArreglo;
 		
 		/*Persistencia Arreglo insert*/
 	}
 
-	public int getIdArreglo() {
-		return idArreglo;
+	private static int getProxNumArreglo() {
+		return ++idArreglo;
 	}
-
+/*
 	public void setIdArreglo(int idArreglo) {
 		this.idArreglo = idArreglo;
+	}*/
+
+	public int getIdArreglo(){
+		return idArreglo;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public String getDescripcion() {
