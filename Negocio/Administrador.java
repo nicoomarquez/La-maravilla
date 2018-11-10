@@ -3,10 +3,15 @@ package Negocio;
 public class Administrador {
 	private String nombreUsuario, contrasenia;
 	
-	public Administrador(String nombreUsuario, String contrasenia) {
+	public Administrador(String nombreUsuario, String contrasenia){//para validar login
+		this.nombreUsuario = nombreUsuario;
+		this.contrasenia = contrasenia;
+	}
+
+	public Administrador() {
 		// TODO Auto-generated constructor stub
-		this.nombreUsuario=nombreUsuario;
-		this.contrasenia=contrasenia;
+		this.nombreUsuario="admin";
+		this.contrasenia="admin";
 	}
 
 	public String getNombreUsuario() {
@@ -24,6 +29,5 @@ public class Administrador {
 	public void setContrasenia(String contrasenia) {
 		this.contrasenia = contrasenia;
 	}
-
 	
 }

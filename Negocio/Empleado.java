@@ -3,23 +3,35 @@ package Negocio;
 import java.util.Vector;
 
 public class Empleado extends Usuario {
+	private static int idEmpleado;
 	private String telefono, cuil;
+	private boolean estado;
 
 	public Empleado(String nombre, String apellido, String domicilio, 
 			String dni, String localidad, String telefono,String cuil) {
 		
 		super(nombre, apellido, domicilio, dni, localidad);
-		
+		idEmpleado = getProxNumEmpleado();
 		this.telefono=telefono;
 		this.cuil=cuil;
-		
+		this.estado=true;
+	}
+
+	private int getProxNumEmpleado() {
+		return ++idEmpleado;
 	}
 
 	public Empleado(){
 		// TODO Auto-generated constructor stub
 		super();
+		idEmpleado=0;
 		telefono="";
 		cuil="";
+	}
+	
+	
+	public static int getIdEmpleado() {
+		return idEmpleado;
 	}
 
 	public String getTelefono() {
@@ -37,11 +49,18 @@ public class Empleado extends Usuario {
 	public void setCuil(String cuil) {
 		this.cuil = cuil;
 	}
+	
+	public boolean isEstado() {
+		return estado;
+	}
 
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	}
+	
 	@Override
-	public Object insert(Object o) {
+	public void insert(Object o) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

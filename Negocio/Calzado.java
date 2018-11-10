@@ -3,7 +3,7 @@ package Negocio;
 import java.util.Vector;
 
 public class Calzado {
-	private int idCalzado;
+	private String codigoCalzado;
 	private Vector<Arreglo> arreglos;
 	private float costoCalzado;
 	private Empleado empleado;
@@ -14,23 +14,22 @@ public class Calzado {
 		empleado=new Empleado();		
 	}
 	
-	public Calzado(int idCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos) {
+	public Calzado(String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos) {
 		super();
-		this.idCalzado = idCalzado;
+		this.codigoCalzado = codigoCalzado;
 		this.costoCalzado = costoCalzado;
 		this.empleado = empleado;
 		this.arreglos=arreglos;
 		this.estado='P';//estado pendiente
 		/*Se inserta en la BD*/
 	}
-	
-	
-	public int getIdCalzado() {
-		return idCalzado;
+
+	public String getCodigoCalzado() {
+		return codigoCalzado;
 	}
 
-	public void setIdCalzado(int idCalzado) {
-		this.idCalzado = idCalzado;
+	public void setCodigoCalzado(String codigoCalzado) {
+		this.codigoCalzado = codigoCalzado;
 	}
 
 	public Vector<Arreglo> getArreglos() {
