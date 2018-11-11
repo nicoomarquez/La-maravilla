@@ -10,10 +10,10 @@ public class Cliente extends Usuario{
 	public Cliente(String nombre, String apellido, String domicilio, 
 			String dni, String localidad,String codigoPostal, String mail) {
 		super(nombre, apellido, domicilio, dni, localidad);
-		idCliente=getProxNumCliente();
-		this.codigoPostal=codigoPostal;
-		this.mail=mail;
-		this.estado=true; //cuando se da de alta un usuario siempre estara activo
+		idCliente = getProxNumCliente();
+		this.codigoPostal = codigoPostal;
+		this.mail = mail;
+		this.estado = true; //cuando se da de alta un usuario siempre estara activo
 	}
 
 	private int getProxNumCliente() {
