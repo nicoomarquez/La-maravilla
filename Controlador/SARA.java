@@ -13,10 +13,10 @@ private Administrador administrador;
 
 	private SARA() {
 		// TODO Auto-generated constructor stub
-		empleados=	new Vector<Empleado>();
+		empleados =	new Vector<Empleado>();
 		boletas  =	new Vector<Boleta>();
 		clientes =	new Vector<Cliente>();
-		administrador= new Administrador();
+		administrador = new Administrador();
 	}
 
 	public Vector<Empleado> getEmpleados() {
@@ -63,7 +63,45 @@ private Administrador administrador;
 	}
 	
 	public static SARA getInstancia(){
+		if (instancia == null)
+			instancia = new SARA();
 		return instancia;
+	}
+
+	public boolean dniRepetido(String dniIngresado) {
+		for(int i = 0;  i < clientes.size(); i++) {
+			if(clientes.elementAt(i).getDni().equals(dniIngresado))
+				return true;
+		}
+		return false;
+	}
+
+	public boolean mailRepetido(String mailIngresado) {
+		for(int i = 0;  i < clientes.size(); i++) {
+			if(clientes.elementAt(i).getMail().equals(mailIngresado))
+				return true;
+		}
+		return false;
+	}
+
+	public void crearCliente(String nombre, String apellido, String dni, String mail, String domicilio, String localidad,
+			String codigoPostal) {
+		// Las verificaciones de que el cliente ya existe se hacen en la pantala CrearCliente
+		// cuando se verifica que el dni y mail ingresado no sean repetidos
+		Cliente clienteNuevo = new Cliente(nombre, apellido, dni, mail, domicilio, localidad, codigoPostal);
+		clientes.add(clienteNuevo);
+	}
+
+	public Cliente buscarCliente(String dniIngresado) {
+		//primero pregunto si el dni es repetido
+		//si no es repetido, busco en el vector de clientes y devuelvo aquel que tenga el mismo dni ingresado
+		if(dniRepetido(dniIngresado)) {
+			for(int i = 0; i < clientes.size(); i++) {
+				if(clientes.elementAt(i).getDni().equals(dniIngresado))
+					return clientes.elementAt(i);
+			}
+		}
+		return null;
 	}
 	
 }

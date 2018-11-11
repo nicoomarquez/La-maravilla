@@ -1,4 +1,4 @@
-package vista;
+package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -7,9 +7,14 @@ import java.awt.Panel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Controlador.SARA;
+import Negocio.Cliente;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
@@ -23,9 +28,9 @@ public class MenuCliente extends JFrame {
 	private JTextField nombre;
 	private JTextField apellido;
 	private JTextField mail;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField domicilio;
+	private JTextField localidad;
+	private JTextField codigoPostal;
 	private static MenuCliente instancia;
 	
 	public static MenuCliente getInstancia() {
@@ -73,6 +78,13 @@ public class MenuCliente extends JFrame {
 		dni.setColumns(10);
 		
 		JButton btnAtrs_1 = new JButton("Atr\u00E1s");
+		btnAtrs_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Menu.getInstancia().setLocationRelativeTo(null);
+				Menu.getInstancia().setVisible(true);
+			}
+		});
 		btnAtrs_1.setBounds(64, 237, 89, 23);
 		contentPane.add(btnAtrs_1);
 		
@@ -90,15 +102,26 @@ public class MenuCliente extends JFrame {
 		btnModificar.setBounds(262, 237, 89, 23);
 		contentPane.add(btnModificar);
 		
-		JButton btnBuscar = new JButton("Buscar ");
+		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.setBounds(214, 5, 88, 23);
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(true) {
+				if(dni.getText().isEmpty())
+					JOptionPane.showMessageDialog(null, "Ingrese un DNI para continuar");
+				Cliente cliente =  SARA.getInstancia().buscarCliente(dni.getText());
+				if( cliente != null) {
 					panel.setVisible(true);
+					nombre.setText(cliente.getNombre());
+					apellido.setText(cliente.getApellido());
+					mail.setText(cliente.getMail());
+					domicilio.setText(cliente.getDomicilio());
+					localidad.setText(cliente.getLocalidad());
+					codigoPostal.setText(cliente.getCodigoPostal());
 					btnEliminar.setEnabled(true);
 					btnModificar.setEnabled(true);
 				}
+				else
+					JOptionPane.showMessageDialog(null, "No existe cliente con el DNI ingresado");
 			}
 		});
 		
@@ -106,6 +129,7 @@ public class MenuCliente extends JFrame {
 		btnNuevoCliente.setBounds(312, 5, 117, 23);
 		btnNuevoCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose();
 				CrearCliente.getInstancia().setLocationRelativeTo(null);
 				CrearCliente.getInstancia().setVisible(true);
 			}
@@ -139,26 +163,26 @@ public class MenuCliente extends JFrame {
 		JLabel lblDomicilio = new JLabel("Domicilio:");
 		lblDomicilio.setBounds(10, 108, 55, 14);
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setBounds(112, 105, 302, 20);
-		textField.setColumns(10);
+		domicilio = new JTextField();
+		domicilio.setEditable(false);
+		domicilio.setBounds(112, 105, 302, 20);
+		domicilio.setColumns(10);
 		
 		JLabel lblLocalidad = new JLabel("Localidad:");
 		lblLocalidad.setBounds(10, 139, 63, 14);
 		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setBounds(112, 136, 302, 20);
-		textField_1.setColumns(10);
+		localidad = new JTextField();
+		localidad.setEditable(false);
+		localidad.setBounds(112, 136, 302, 20);
+		localidad.setColumns(10);
 		
 		JLabel lblCdigoPostal = new JLabel("C\u00F3digo Postal:");
 		lblCdigoPostal.setBounds(10, 170, 92, 14);
 		
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setBounds(112, 167, 302, 20);
-		textField_2.setColumns(10);
+		codigoPostal = new JTextField();
+		codigoPostal.setEditable(false);
+		codigoPostal.setBounds(112, 167, 302, 20);
+		codigoPostal.setColumns(10);
 		
 		JButton btnAtrs = new JButton("Atr\u00E1s");
 		btnAtrs.setBounds(52, 205, 76, 23);
@@ -193,10 +217,10 @@ public class MenuCliente extends JFrame {
 		panel.add(nombre);
 		panel.add(apellido);
 		panel.add(mail);
-		panel.add(textField);
-		panel.add(textField_1);
+		panel.add(domicilio);
+		panel.add(localidad);
 		panel.add(lblCdigoPostal);
-		panel.add(textField_2);
+		panel.add(codigoPostal);
 		contentPane.add(lblDni);
 		contentPane.add(dni);
 		contentPane.add(btnBuscar);

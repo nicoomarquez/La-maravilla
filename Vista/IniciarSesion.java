@@ -54,7 +54,7 @@ public class IniciarSesion extends JFrame {
 	 * Create the frame.
 	 */
 	public IniciarSesion() {
-		setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+		//setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 		setForeground(new Color(0, 0, 51));
 		setTitle("Iniciar Sesion");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,8 +109,11 @@ public class IniciarSesion extends JFrame {
 				SARA.getInstancia(textFieldUsuario.getText(), passwordField.getText());
 				if(s == null)
 					JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrecto/a");
-				else
-					JOptionPane.showMessageDialog(null, "Bienvenido");
+				else {
+					dispose();
+					Menu.getInstancia().setLocationRelativeTo(null);
+					Menu.getInstancia().setVisible(true);
+				}
 			}
 		});
 		btnIniciarSesion.setForeground(new Color(0, 0, 51));

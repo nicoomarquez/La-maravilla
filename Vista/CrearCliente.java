@@ -1,4 +1,4 @@
-package vista;
+package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -6,7 +6,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Controlador.SARA;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -129,6 +133,8 @@ public class CrearCliente extends JFrame {
 		btnAtrs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				MenuCliente.getInstancia().setLocationRelativeTo(null);
+				MenuCliente.getInstancia().setVisible(true);
 			}
 		});
 		btnAtrs.setBounds(110, 227, 89, 23);
@@ -137,6 +143,32 @@ public class CrearCliente extends JFrame {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Verificacion de DNI
+				if(SARA.getInstancia().dniRepetido(dni.getText())) {
+					JOptionPane.showMessageDialog(null, "El DNI ingresado ya se encuentra registrado");
+				}
+				else if(SARA.getInstancia().mailRepetido(mail.getText())) {
+					JOptionPane.showMessageDialog(null, "El mail ingresado ya se encuentra ingresado");
+				}
+				else if (nombre.getText().isEmpty() || apellido.getText().isEmpty() || dni.getText().isEmpty() || mail.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Ingrese los campos obligatorios");
+				}
+				else {
+					SARA.getInstancia().crearCliente(nombre.getText(), apellido.getText(), dni.getText(), mail.getText(),
+							domicilio.getText(), localidad.getText(), codigoPostal.getText());
+					JOptionPane.showMessageDialog(null, "Cliente creado con éxito");
+					limpiarPantalla();
+				}
+			}
+
+			private void limpiarPantalla() {
+				nombre.setText(null);
+				apellido.setText(null);
+				dni.setText(null);
+				mail.setText(null);
+				domicilio.setText(null);
+				localidad.setText(null);
+				codigoPostal.setText(null);
 			}
 		});
 		btnAceptar.setBounds(234, 227, 89, 23);
