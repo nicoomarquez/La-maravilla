@@ -13,10 +13,10 @@ private Administrador administrador;
 
 	private SARA() {
 		// TODO Auto-generated constructor stub
-		empleados =	new Vector<Empleado>();
+		empleados=	new Vector<Empleado>();
 		boletas  =	new Vector<Boleta>();
 		clientes =	new Vector<Cliente>();
-		administrador = new Administrador();
+		administrador= new Administrador();
 	}
 
 	public Vector<Empleado> getEmpleados() {

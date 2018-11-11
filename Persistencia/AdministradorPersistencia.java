@@ -4,7 +4,7 @@ import java.util.Vector;
 
 public abstract class AdministradorPersistencia {
 	
-	public abstract Object insert(Object o);
+	public abstract void insert(Object o);
 	
 	public abstract void delete(Object o);
 	
