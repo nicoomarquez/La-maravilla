@@ -1,35 +1,28 @@
 package Vista;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import java.awt.Font;
-import javax.swing.JRadioButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JTextArea;
-import javax.swing.JList;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
-import javax.swing.AbstractListModel;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JSpinner;
-import javax.swing.JFormattedTextField;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class InsertarCalzadoBoleta extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtIngreseMail;
 	private JTextField textField;
@@ -174,8 +167,8 @@ public class InsertarCalzadoBoleta extends JFrame {
 		lblEmpleado.setBounds(10, 383, 68, 14);
 		contentPane.add(lblEmpleado);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Manuel Gomez"}));
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Manuel Gomez"}));
 		comboBox.setBounds(111, 380, 124, 20);
 		contentPane.add(comboBox);
 		
