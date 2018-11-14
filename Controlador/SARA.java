@@ -102,6 +102,15 @@ private Administrador administrador;
 			}
 		}
 		return null;
+	}	
+	
+	public Vector <Boleta> getBoletasCliente(String dni){
+		Vector<Boleta> b = new Vector<Boleta>();
+		for(int i=0; i<boletas.size(); i++){
+			if(boletas.elementAt(i).getCliente().getDni().equalsIgnoreCase(dni) && boletas.elementAt(i).getEstado() == 'P')
+				b.add(boletas.elementAt(i));
+		}
+		return b;
 	}
 	
 }

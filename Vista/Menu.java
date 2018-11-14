@@ -1,21 +1,21 @@
 package Vista;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
-import javax.swing.JButton;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Font;
 
 public class Menu extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private static Menu instancia;
 	
@@ -57,6 +57,9 @@ public class Menu extends JFrame {
 		btnNewButton.setFont(new Font("Kalinga", Font.BOLD, 12));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				Boletas.getInstancia().setLocationRelativeTo(null);
+				Boletas.getInstancia().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(72, 57, 130, 23);
