@@ -101,7 +101,7 @@ public class IniciarSesion extends JFrame {
 		btnSalir.setBounds(140, 183, 124, 32);
 		contentPane.add(btnSalir);
 		
-		JButton btnIniciarSesion = new JButton("Iniciar Sesi\u00F3n");
+		JButton btnIniciarSesion = new JButton("Iniciar Sesion");
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
