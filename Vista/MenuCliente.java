@@ -129,7 +129,6 @@ public class MenuCliente extends JFrame {
 		btnNuevoCliente.setBounds(312, 5, 117, 23);
 		btnNuevoCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
 				CrearCliente.getInstancia().setLocationRelativeTo(null);
 				CrearCliente.getInstancia().setVisible(true);
 			}

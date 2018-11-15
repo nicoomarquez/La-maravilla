@@ -158,6 +158,7 @@ public class CrearCliente extends JFrame {
 							domicilio.getText(), localidad.getText(), codigoPostal.getText());
 					JOptionPane.showMessageDialog(null, "Cliente creado con éxito");
 					limpiarPantalla();
+					dispose();
 				}
 			}
 
