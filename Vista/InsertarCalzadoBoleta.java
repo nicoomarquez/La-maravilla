@@ -10,9 +10,12 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+
 import java.awt.Font;
 import javax.swing.JRadioButton;
 import javax.swing.JCheckBox;
@@ -25,7 +28,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
 import Controlador.SARA;
+import Negocio.Arreglo;
 import Negocio.Cliente;
+import Negocio.Empleado;
 
 import java.awt.Color;
 import javax.swing.JScrollPane;
@@ -45,8 +50,9 @@ public class InsertarCalzadoBoleta extends JFrame {
 	private JTextField codigoCalzado;
 	private JTextField total;
 	private static InsertarCalzadoBoleta instancia;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JTable table;
+	private ButtonGroup botones = new ButtonGroup();
+	Vector<Arreglo> arreglos;
+	Vector<Empleado> e;
 	
 	public static InsertarCalzadoBoleta getInstancia() {
 		if(instancia == null)
@@ -83,7 +89,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 135, 462, 382);
+		panel.setBounds(20, 135, 462, 382);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		panel.setVisible(false);
@@ -144,40 +150,34 @@ public class InsertarCalzadoBoleta extends JFrame {
 		panel.add(lblEmpleado);
 		
 		JComboBox empleados = new JComboBox();
-		empleados.setModel(new DefaultComboBoxModel(new String[] {"Manuel Gomez"}));
 		empleados.setBounds(105, 205, 124, 20);
 		panel.add(empleados);
+		//agrego los empleados al comboBox
+		e = SARA.getInstancia().getEmpleados();
+		for(int i = 0; i < e.size(); i++) {
+			empleados.addItem(e.elementAt(i).getNombre()+" "+e.elementAt(i).getApellido());
+		}
+		
+		//traigo de la persistencia
+//		cines = AdmPersistenciaEstablecimiento.getInstancia().select();
+//		for(int i = 0; i < cines.size(); i++) {
+//			establecimientos.addItem(cines.elementAt(i).getNombre());
+//		}
 		
 		JLabel lblCategora = new JLabel("Categor\u00EDa:");
 		lblCategora.setBounds(5, 255, 68, 14);
 		panel.add(lblCategora);
 		
-		JCheckBox chckbxBota = new JCheckBox("Bota");
-		chckbxBota.setBounds(87, 251, 55, 23);
-		panel.add(chckbxBota);
-		
-		JCheckBox chckbxZapatilla = new JCheckBox("Zapatilla");
-		chckbxZapatilla.setBounds(141, 251, 73, 23);
-		panel.add(chckbxZapatilla);
-		
-		JCheckBox chckbxZapatoHombre = new JCheckBox("Zapato hombre");
-		chckbxZapatoHombre.setBounds(216, 251, 108, 23);
-		panel.add(chckbxZapatoHombre);
-		
-		JCheckBox chckbxZapatloMujer = new JCheckBox("Zapato mujer");
-		chckbxZapatloMujer.setBounds(326, 251, 126, 23);
-		panel.add(chckbxZapatloMujer);
-		
 		JLabel lblCdigo = new JLabel("C\u00D3DIGO:");
-		lblCdigo.setBounds(223, 295, 68, 14);
+		lblCdigo.setBounds(300, 295, 68, 14);
 		panel.add(lblCdigo);
 		
 		codigoCalzado = new JTextField();
 		codigoCalzado.setEditable(false);
-		codigoCalzado.setText("ZM-00001");
-		codigoCalzado.setBounds(301, 292, 92, 20);
+		codigoCalzado.setBounds(360, 292, 92, 20);
 		panel.add(codigoCalzado);
 		codigoCalzado.setColumns(10);
+		
 		
 		JLabel lblImporte = new JLabel("IMPORTE:");
 		lblImporte.setBounds(5, 295, 68, 14);
@@ -194,6 +194,13 @@ public class InsertarCalzadoBoleta extends JFrame {
 		panel.add(label_2);
 		
 		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ResumenBoleta rb = new ResumenBoleta("Hola");
+				rb.setVisible(true);
+			
+			}
+		});
 		btnGuardar.setBounds(316, 341, 89, 23);
 		panel.add(btnGuardar);
 		
@@ -241,7 +248,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 		btnBuscar.setBounds(237, 107, 89, 23);
 		contentPane.add(btnBuscar);
 		
-		JButton btnAgregarOtroCalzado = new JButton("Guardar calzado");
+		JButton btnAgregarOtroCalzado = new JButton("Agregar otro calzado");
 		btnAgregarOtroCalzado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
@@ -257,35 +264,58 @@ public class InsertarCalzadoBoleta extends JFrame {
 		separator.setBounds(14, 7, 415, 1);
 		panel.add(separator);
 		
-		table = new JTable();
-		table.setEnabled(false);
-		table.setRowSelectionAllowed(false);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, Object.class, Object.class, Object.class, Object.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
+		DefaultListModel<String> model = new DefaultListModel<>();
+		JList<String> list = new JList<>(model);
+		list.setBounds(70, 109, 371, -89);
+		panel.add(list);
+		//agrego los arreglos a la lista
+		arreglos = SARA.getInstancia().getArreglos();
+		for(int i = 0; i < arreglos.size(); i++) {
+			model.addElement(arreglos.elementAt(i).getDescripcion());
+		}
+		
+		JRadioButton rdbtnBota = new JRadioButton("Bota");
+		botones.add(rdbtnBota);
+		rdbtnBota.setBounds(80, 251, 74, 23);
+		panel.add(rdbtnBota);
+		
+		JRadioButton rdbtnZapatilla = new JRadioButton("Zapatilla");
+		botones.add(rdbtnZapatilla);
+		rdbtnZapatilla.setBounds(156, 251, 74, 23);
+		panel.add(rdbtnZapatilla);
+		
+		JRadioButton rdbtnZapatoHombre = new JRadioButton("Zapato Hombre");
+		botones.add(rdbtnZapatoHombre);
+		rdbtnZapatoHombre.setBounds(238, 251, 109, 23);
+		panel.add(rdbtnZapatoHombre);
+		
+		JRadioButton rdbtnZapatoMujer = new JRadioButton("Zapato Mujer");
+		botones.add(rdbtnZapatoMujer);
+		rdbtnZapatoMujer.setBounds(353, 251, 109, 23);
+		panel.add(rdbtnZapatoMujer);
+		
+		JButton btnConfCat = new JButton("Conf cat");
+		btnConfCat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//genero el codigo segun categoria seleccionada
+				
+				if(rdbtnBota.isSelected()) {
+					codigoCalzado.setText(SARA.getCodigoBota());
+				}
+				if(rdbtnZapatilla.isSelected()) {
+					codigoCalzado.setText(SARA.getCodigoZapatilla());
+				}
+				if(rdbtnZapatoHombre.isSelected()) {
+					codigoCalzado.setText(SARA.getCodigoZapatoHombre());
+				}
+				if(rdbtnZapatoMujer.isSelected()) {
+					codigoCalzado.setText(SARA.getCodigoZapatoMujer());
+				}
+				
 			}
 		});
-		table.setBounds(65, 19, 387, 49);
-		panel.add(table);
+		btnConfCat.setBounds(201, 291, 89, 23);
+		panel.add(btnConfCat);
 		
-		JButton btnQuitar = new JButton("Quitar");
-		btnQuitar.setBounds(178, 90, 89, 23);
-		panel.add(btnQuitar);
-		
-		JButton btnAgregar = new JButton("Agregar");
-		btnAgregar.setBounds(282, 90, 89, 23);
-		panel.add(btnAgregar);
 	}
 }

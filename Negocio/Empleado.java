@@ -8,7 +8,7 @@ public class Empleado extends Usuario {
 	private boolean estado;
 
 	public Empleado(String nombre, String apellido, String domicilio, 
-			String dni, String localidad, String telefono,String cuil) {
+			String dni, String localidad, String telefono, String cuil) {
 		
 		super(nombre, apellido, domicilio, dni, localidad);
 		idEmpleado = getProxNumEmpleado();
