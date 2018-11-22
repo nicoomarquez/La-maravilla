@@ -8,19 +8,21 @@ public class Calzado {
 	private float costoCalzado;
 	private Empleado empleado;
 	private char estado;
+	private String categoria; //Z, ZM, ZH y B
 	
 	public Calzado(){
 		arreglos=new Vector<Arreglo>();
 		empleado=new Empleado();		
 	}
 	
-	public Calzado(String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos) {
+	public Calzado(String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos, String categoria) {
 		super();
 		this.codigoCalzado = codigoCalzado;
 		this.costoCalzado = costoCalzado;
 		this.empleado = empleado;
 		this.arreglos=arreglos;
 		this.estado='P';//estado pendiente
+		this.categoria = categoria;
 		/*Se inserta en la BD*/
 	}
 
@@ -62,5 +64,9 @@ public class Calzado {
 	
 	public void setEstado(char e){
 		this.estado=e;
+	}
+
+	public String getCategoria() {
+		return categoria;
 	}
 }

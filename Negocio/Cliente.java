@@ -8,7 +8,7 @@ public class Cliente extends Usuario{
 	private boolean estado;
 
 	public Cliente(String nombre, String apellido, String dni, 
-			String mail, String domicilio, String localidad,String codigoPostal) {
+			String mail, String domicilio,String localidad, String codigoPostal) {
 		super(nombre, apellido, domicilio, dni, localidad);
 		idCliente = getProxNumCliente();
 		this.codigoPostal = codigoPostal;

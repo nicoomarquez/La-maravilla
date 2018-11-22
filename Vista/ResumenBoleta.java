@@ -23,6 +23,14 @@ public class ResumenBoleta extends JFrame {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTable table;
+	private static ResumenBoleta instancia;
+	
+	public static ResumenBoleta getInstancia() {
+		String title = null;
+		if(instancia == null)
+			instancia = new ResumenBoleta(title);
+		return instancia;
+	}
 
 	/**
 	 * Launch the application.
@@ -31,7 +39,8 @@ public class ResumenBoleta extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ResumenBoleta frame = new ResumenBoleta();
+					String mensaje = null;
+					ResumenBoleta frame = new ResumenBoleta(mensaje);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -42,9 +51,10 @@ public class ResumenBoleta extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param mensaje 
 	 */
-	public ResumenBoleta() {
-		setTitle("Resumen Boleta");
+	public ResumenBoleta(String mensaje) {
+		setTitle(mensaje);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 440);
 		contentPane = new JPanel();

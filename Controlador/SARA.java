@@ -9,13 +9,24 @@ private static SARA instancia=null;
 private Vector<Empleado> empleados;
 private Vector<Boleta> boletas;
 private Vector<Cliente> clientes;
+private Vector<Arreglo> arreglos;
 private Administrador administrador;
+private static int codigoCalzado;
 
 	private SARA() {
 		// TODO Auto-generated constructor stub
 		empleados =	new Vector<Empleado>();
 		boletas  =	new Vector<Boleta>();
 		clientes =	new Vector<Cliente>();
+		arreglos = new Vector<Arreglo>();
+		Arreglo a = new Arreglo("Suela rota", "Reparacion de suelas de zapatos para hombre", 90);
+		Arreglo b = new Arreglo("Suela limpia", "Reparacion de suelas de zapatos para mujer", 50);
+		arreglos.add(a);
+		arreglos.add(b);
+		Empleado e = new Empleado("Luis", "Martinez", "San Juan 154", "20145785", "CABA", "11111111", "2-4548412-5");
+		empleados.add(e);
+		Empleado e1 = new Empleado("Jose", "Gomez", "San Juan 154", "20145785", "CABA", "11111111", "2-4548412-5");
+		empleados.add(e1);
 		administrador = new Administrador();
 	}
 
@@ -49,6 +60,15 @@ private Administrador administrador;
 
 	public void setAdministrador(Administrador administrador) {
 		this.administrador = administrador;
+	}
+
+	public void setArreglos(Vector<Arreglo> arreglos) {
+		this.arreglos = arreglos;
+	}
+	
+	public Vector<Arreglo> getArreglos()
+	{
+		return arreglos;
 	}
 
 	public static SARA getInstancia(String us, String pass) {
@@ -102,15 +122,27 @@ private Administrador administrador;
 			}
 		}
 		return null;
-	}	
+	}
 	
-	public Vector <Boleta> getBoletasCliente(String dni){
-		Vector<Boleta> b = new Vector<Boleta>();
-		for(int i=0; i<boletas.size(); i++){
-			if(boletas.elementAt(i).getCliente().getDni().equalsIgnoreCase(dni) && boletas.elementAt(i).getEstado() == 'P')
-				b.add(boletas.elementAt(i));
-		}
-		return b;
+	private static int getProximoNumero() {
+		return ++codigoCalzado;
+	}
+
+	public static String getCodigoBota() {
+		String codigo = Integer.toString(getProximoNumero()-1);
+		return 'B'+ codigo;
+	}
+	public static String getCodigoZapatilla() {
+		String codigo = Integer.toString(getProximoNumero()-1);
+		return 'Z'+ codigo;
+	}
+	public static String getCodigoZapatoHombre() {
+		String codigo = Integer.toString(getProximoNumero()-1);
+		return "ZH"+ codigo;
+	}
+	public static String getCodigoZapatoMujer() {
+		String codigo = Integer.toString(getProximoNumero()-1);
+		return "ZM"+ codigo;
 	}
 	
 }

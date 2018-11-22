@@ -9,7 +9,7 @@ public class Boleta {
 	private float total, seña;
 	private Date fecha;
 	private Vector<Calzado> calzados;
-	private char estado;// P(pendiente), L(listo), E(entregado)
+	private char estado;
 	
 	public Boleta() {
 		// TODO Auto-generated constructor stub
