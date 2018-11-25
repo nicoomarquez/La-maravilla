@@ -11,8 +11,8 @@ public class Calzado {
 	private String categoria; //Z, ZM, ZH y B
 	
 	public Calzado(){
-		arreglos=new Vector<Arreglo>();
-		empleado=new Empleado();		
+		arreglos = new Vector<Arreglo>();
+		empleado = new Empleado();		
 	}
 	
 	public Calzado(String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos, String categoria) {
@@ -20,8 +20,8 @@ public class Calzado {
 		this.codigoCalzado = codigoCalzado;
 		this.costoCalzado = costoCalzado;
 		this.empleado = empleado;
-		this.arreglos=arreglos;
-		this.estado='P';//estado pendiente
+		this.arreglos = arreglos;
+		this.estado = 'P';//estado pendiente
 		this.categoria = categoria;
 		/*Se inserta en la BD*/
 	}

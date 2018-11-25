@@ -12,9 +12,9 @@ public class Empleado extends Usuario {
 		
 		super(nombre, apellido, domicilio, dni, localidad);
 		idEmpleado = getProxNumEmpleado();
-		this.telefono=telefono;
-		this.cuil=cuil;
-		this.estado=true;
+		this.telefono = telefono;
+		this.cuil = cuil;
+		this.estado = true;
 	}
 
 	private int getProxNumEmpleado() {

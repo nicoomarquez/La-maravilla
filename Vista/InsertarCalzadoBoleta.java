@@ -29,6 +29,7 @@ import javax.swing.border.LineBorder;
 
 import Controlador.SARA;
 import Negocio.Arreglo;
+import Negocio.Calzado;
 import Negocio.Cliente;
 import Negocio.Empleado;
 
@@ -48,11 +49,12 @@ public class InsertarCalzadoBoleta extends JFrame {
 	private JTextField dni;
 	private JTextField observaciones;
 	private JTextField codigoCalzado;
-	private JTextField total;
+	private JTextField importe;
 	private static InsertarCalzadoBoleta instancia;
 	private ButtonGroup botones = new ButtonGroup();
 	Vector<Arreglo> arreglos;
 	Vector<Empleado> e;
+	private String categoria;
 	
 	public static InsertarCalzadoBoleta getInstancia() {
 		if(instancia == null)
@@ -183,11 +185,11 @@ public class InsertarCalzadoBoleta extends JFrame {
 		lblImporte.setBounds(5, 295, 68, 14);
 		panel.add(lblImporte);
 		
-		total = new JTextField();
-		total.setText("270,00");
-		total.setBounds(87, 292, 86, 20);
-		panel.add(total);
-		total.setColumns(10);
+		importe = new JTextField();
+		importe.setText("270,00");
+		importe.setBounds(87, 292, 86, 20);
+		panel.add(importe);
+		importe.setColumns(10);
 		
 		JLabel label_2 = new JLabel("$");
 		label_2.setBounds(77, 295, 20, 14);
@@ -251,6 +253,10 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JButton btnAgregarOtroCalzado = new JButton("Agregar otro calzado");
 		btnAgregarOtroCalzado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//Se almacenan los datos antes de limpiar la pantalla
+				//Para crear un calzado necesito: el código, costo(importe), empleado, los arreglos y la categoria
+				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), (Empleado)empleados.getSelectedItem(), null, categoria);
+				//Se limpia la pantalla para agregar otro calzado
 			}
 		});
 		btnAgregarOtroCalzado.setBounds(156, 341, 135, 23);
@@ -265,9 +271,6 @@ public class InsertarCalzadoBoleta extends JFrame {
 		panel.add(separator);
 		
 		DefaultListModel<String> model = new DefaultListModel<>();
-		JList<String> list = new JList<>(model);
-		list.setBounds(70, 109, 371, -89);
-		panel.add(list);
 		//agrego los arreglos a la lista
 		arreglos = SARA.getInstancia().getArreglos();
 		for(int i = 0; i < arreglos.size(); i++) {
@@ -275,47 +278,51 @@ public class InsertarCalzadoBoleta extends JFrame {
 		}
 		
 		JRadioButton rdbtnBota = new JRadioButton("Bota");
+		//Acción que se realiza cuando se selecciona el botón
+		rdbtnBota.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				codigoCalzado.setText(SARA.getCodigoBota());
+				categoria = "B";
+			}
+		});
 		botones.add(rdbtnBota);
 		rdbtnBota.setBounds(80, 251, 74, 23);
 		panel.add(rdbtnBota);
 		
 		JRadioButton rdbtnZapatilla = new JRadioButton("Zapatilla");
+		//Acción que se realiza cuando se selecciona el botón
+		rdbtnZapatilla.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Generación del código 
+				codigoCalzado.setText(SARA.getCodigoZapatilla());
+				categoria = "Z";
+			}
+		});
 		botones.add(rdbtnZapatilla);
 		rdbtnZapatilla.setBounds(156, 251, 74, 23);
 		panel.add(rdbtnZapatilla);
 		
 		JRadioButton rdbtnZapatoHombre = new JRadioButton("Zapato Hombre");
+		rdbtnZapatoHombre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				codigoCalzado.setText(SARA.getCodigoZapatoHombre());
+				categoria = "ZH";
+			}
+		});
 		botones.add(rdbtnZapatoHombre);
-		rdbtnZapatoHombre.setBounds(238, 251, 109, 23);
+		rdbtnZapatoHombre.setBounds(238, 251, 115, 23);
 		panel.add(rdbtnZapatoHombre);
 		
 		JRadioButton rdbtnZapatoMujer = new JRadioButton("Zapato Mujer");
+		rdbtnZapatoMujer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				codigoCalzado.setText(SARA.getCodigoZapatoMujer());
+				categoria = "ZM";
+			}
+		});
 		botones.add(rdbtnZapatoMujer);
 		rdbtnZapatoMujer.setBounds(353, 251, 109, 23);
 		panel.add(rdbtnZapatoMujer);
-		
-		JButton btnConfCat = new JButton("Conf cat");
-		btnConfCat.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//genero el codigo segun categoria seleccionada
-				
-				if(rdbtnBota.isSelected()) {
-					codigoCalzado.setText(SARA.getCodigoBota());
-				}
-				if(rdbtnZapatilla.isSelected()) {
-					codigoCalzado.setText(SARA.getCodigoZapatilla());
-				}
-				if(rdbtnZapatoHombre.isSelected()) {
-					codigoCalzado.setText(SARA.getCodigoZapatoHombre());
-				}
-				if(rdbtnZapatoMujer.isSelected()) {
-					codigoCalzado.setText(SARA.getCodigoZapatoMujer());
-				}
-				
-			}
-		});
-		btnConfCat.setBounds(201, 291, 89, 23);
-		panel.add(btnConfCat);
 		
 	}
 }

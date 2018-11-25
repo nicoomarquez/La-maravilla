@@ -2,28 +2,21 @@ package Negocio;
 
 import java.util.Vector;
 
+import Persistencia.AdmPersistenciaCliente;
+
 public class Cliente extends Usuario{
-	private static int idCliente;
 	private String codigoPostal, mail;
 	private boolean estado;
 
 	public Cliente(String nombre, String apellido, String dni, 
-			String mail, String domicilio,String localidad, String codigoPostal) {
+			String mail, String domicilio, String localidad, String codigoPostal) {
 		super(nombre, apellido, domicilio, dni, localidad);
-		idCliente = getProxNumCliente();
+		
 		this.codigoPostal = codigoPostal;
 		this.mail = mail;
 		this.estado = true; //cuando se da de alta un usuario siempre estara activo
 	}
 
-	private int getProxNumCliente() {
-		// TODO Auto-generated method stub
-		return ++idCliente;
-	}
-
-	public int getIdCliente(){
-		return idCliente;
-	}
 	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}
@@ -50,6 +43,10 @@ public class Cliente extends Usuario{
 
 	public void setEstado(boolean estado) {
 		this.estado = estado;
+	}
+	
+	public void insertarCliente(Cliente c) {
+		AdmPersistenciaCliente.getInstancia().insert(c);
 	}
 
 	@Override

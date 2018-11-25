@@ -3,6 +3,7 @@ package Controlador;
 import java.util.Vector;
 
 import Negocio.*;
+import Persistencia.AdmPersistenciaCliente;
 
 public class SARA {
 private static SARA instancia=null;
@@ -93,7 +94,8 @@ private static int codigoCalzado;
 			if(clientes.elementAt(i).getDni().equals(dniIngresado))
 				return true;
 		}
-		return false;
+		//Busco en la base de datos
+		return AdmPersistenciaCliente.getInstancia().dniRepetido(dniIngresado);	
 	}
 
 	public boolean mailRepetido(String mailIngresado) {
@@ -101,7 +103,8 @@ private static int codigoCalzado;
 			if(clientes.elementAt(i).getMail().equals(mailIngresado))
 				return true;
 		}
-		return false;
+		//Busco en la base de datos
+		return AdmPersistenciaCliente.getInstancia().mailRepetido(mailIngresado);
 	}
 
 	public void crearCliente(String nombre, String apellido, String dni, String mail, String domicilio, String localidad,
@@ -110,17 +113,19 @@ private static int codigoCalzado;
 		// cuando se verifica que el dni y mail ingresado no sean repetidos
 		Cliente clienteNuevo = new Cliente(nombre, apellido, dni, mail, domicilio, localidad, codigoPostal);
 		clientes.add(clienteNuevo);
+		//inserto en la base de datos
+		clienteNuevo.insertarCliente(clienteNuevo);		
 	}
 
 	public Cliente buscarCliente(String dniIngresado) {
-		//primero pregunto si el dni es repetido
-		//si no es repetido, busco en el vector de clientes y devuelvo aquel que tenga el mismo dni ingresado
-		if(dniRepetido(dniIngresado)) {
-			for(int i = 0; i < clientes.size(); i++) {
-				if(clientes.elementAt(i).getDni().equals(dniIngresado))
-					return clientes.elementAt(i);
-			}
+		//busco en memoria
+		for(int i = 0; i < clientes.size(); i++) {
+			if(clientes.elementAt(i).getDni().equals(dniIngresado))
+				return clientes.elementAt(i);
 		}
+		//busco en la base de datos
+		Cliente c = AdmPersistenciaCliente.getInstancia().buscarCliente(dniIngresado);
+		if (c != null) return c;
 		return null;
 	}
 	

@@ -143,15 +143,15 @@ public class CrearCliente extends JFrame {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(nombre.getText().isEmpty() || apellido.getText().isEmpty() || dni.getText().isEmpty() || mail.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Ingrese los campos obligatorios");
+				}
 				//Verificacion de DNI
-				if(SARA.getInstancia().dniRepetido(dni.getText())) {
+				else if(SARA.getInstancia().dniRepetido(dni.getText())) {
 					JOptionPane.showMessageDialog(null, "El DNI ingresado ya se encuentra registrado");
 				}
 				else if(SARA.getInstancia().mailRepetido(mail.getText())) {
 					JOptionPane.showMessageDialog(null, "El mail ingresado ya se encuentra ingresado");
-				}
-				else if (nombre.getText().isEmpty() || apellido.getText().isEmpty() || dni.getText().isEmpty() || mail.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, "Ingrese los campos obligatorios");
 				}
 				else {
 					SARA.getInstancia().crearCliente(nombre.getText(), apellido.getText(), dni.getText(), mail.getText(),
