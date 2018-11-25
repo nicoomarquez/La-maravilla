@@ -7,10 +7,10 @@ public class Arreglo {
 	private float costoArreglo;
 	
 	public Arreglo(){
-		idArreglo=0;
-		nombre="";
-		descripcion="";
-		costoArreglo=0f;
+		idArreglo = 0;
+		nombre = "";
+		descripcion = "";
+		costoArreglo = 0f;
 	}
 
 	public Arreglo(String nombre, String descripcion, float costoArreglo) {

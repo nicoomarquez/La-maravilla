@@ -13,8 +13,8 @@ public class Boleta {
 	
 	public Boleta() {
 		// TODO Auto-generated constructor stub
-		cliente= new Cliente();
-		calzados= new Vector<Calzado>();
+		cliente = new Cliente();
+		calzados = new Vector<Calzado>();
 	}
 
 	public Boleta(int idBoleta, Cliente cliente, float total, float seña, Date fecha, Vector<Calzado> calzados,
