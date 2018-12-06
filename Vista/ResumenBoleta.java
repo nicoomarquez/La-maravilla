@@ -13,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.JList;
 
 public class ResumenBoleta extends JFrame {
 
@@ -191,5 +192,9 @@ public class ResumenBoleta extends JFrame {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBounds(226, 379, 89, 23);
 		contentPane.add(btnAceptar);
+		
+		JList list = new JList();
+		list.setBounds(66, 190, 326, 111);
+		contentPane.add(list);
 	}
 }

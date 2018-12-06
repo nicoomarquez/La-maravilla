@@ -324,5 +324,9 @@ public class InsertarCalzadoBoleta extends JFrame {
 		rdbtnZapatoMujer.setBounds(353, 251, 109, 23);
 		panel.add(rdbtnZapatoMujer);
 		
+		JList list = new JList();
+		list.setBounds(59, 18, 382, 101);
+		panel.add(list);
+		
 	}
 }
