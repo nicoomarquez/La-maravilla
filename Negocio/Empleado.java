@@ -1,9 +1,10 @@
 package Negocio;
 
-import java.util.Vector;
+import Persistencia.AdmPersistenciaEmpleado;
 
 public class Empleado extends Usuario {
-	private static int idEmpleado;
+	private int idEmpleado;
+	private static int autonumerico;
 	private String telefono, cuil;
 	private boolean estado;
 
@@ -15,12 +16,16 @@ public class Empleado extends Usuario {
 		this.telefono = telefono;
 		this.cuil = cuil;
 		this.estado = true;
+		AdmPersistenciaEmpleado.getInstancia().insert(this);
 	}
 
 	private int getProxNumEmpleado() {
-		return ++idEmpleado;
+		return ++autonumerico;
 	}
-
+	
+	public static void iniciarAutoNumerico(int valorInicial){
+		autonumerico=valorInicial;
+	}
 	public Empleado(){
 		// TODO Auto-generated constructor stub
 		super();
@@ -30,7 +35,7 @@ public class Empleado extends Usuario {
 	}
 	
 	
-	public static int getIdEmpleado() {
+	public int getIdEmpleado() {
 		return idEmpleado;
 	}
 
@@ -59,28 +64,23 @@ public class Empleado extends Usuario {
 	}
 	
 	@Override
-	public void insert(Object o) {
+	public void delete() {
 		// TODO Auto-generated method stub
+		AdmPersistenciaEmpleado.getInstancia().delete(this);
 	}
 
 	@Override
-	public void delete(Object o) {
+	public void update() {
 		// TODO Auto-generated method stub
-		
+		AdmPersistenciaEmpleado.getInstancia().update(this);
 	}
 
-	@Override
-	public void update(Object o) {
+	public void setId(int id) {
 		// TODO Auto-generated method stub
-		
+		idEmpleado=id;
 	}
 
-	@Override
-	public Vector<Object> select(Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+
 	
 	
 	

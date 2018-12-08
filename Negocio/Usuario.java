@@ -1,9 +1,8 @@
 package Negocio;
 
-import Persistencia.AdministradorPersistencia;
-
-public abstract class Usuario extends AdministradorPersistencia{
+public abstract class Usuario{
 	protected String nombre, apellido, domicilio, dni, localidad;
+	protected boolean estado;
 	
 	public Usuario(){
 		nombre="";
@@ -63,6 +62,19 @@ public abstract class Usuario extends AdministradorPersistencia{
 	public void setLocalidad(String localidad) {
 		this.localidad = localidad;
 	}
+	
+	public boolean isEstado() {
+		return estado;
+	}
+
+	public void setEstado(boolean estado) {
+		this.estado = estado;
+	}
+
+	
+	public abstract void delete();
+	
+	public abstract void update();
 	
 	
 }

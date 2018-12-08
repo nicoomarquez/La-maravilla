@@ -1,16 +1,17 @@
 package Negocio;
 
+import Persistencia.AdmPersistenciaArreglo;
+
 public class Arreglo {
-	private static int idArreglo;
+	private int idArreglo;
+	private static int autonumerico;
 	private String nombre;
 	private String descripcion;
 	private float costoArreglo;
+	private boolean estado;
 	
 	public Arreglo(){
-		idArreglo = 0;
-		nombre = "";
-		descripcion = "";
-		costoArreglo = 0f;
+
 	}
 
 	public Arreglo(String nombre, String descripcion, float costoArreglo) {
@@ -19,18 +20,20 @@ public class Arreglo {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.costoArreglo = costoArreglo;
+		this.estado=true;
 		
 		/*Persistencia Arreglo insert*/
+		AdmPersistenciaArreglo.getInstancia().insert(this);
 	}
 
 	private static int getProxNumArreglo() {
-		return ++idArreglo;
+		return ++autonumerico;
 	}
-/*
-	public void setIdArreglo(int idArreglo) {
-		this.idArreglo = idArreglo;
-	}*/
 
+	public static void iniciarAutoNumerico(int valorInicial){
+		autonumerico=valorInicial;
+	}
+	
 	public int getIdArreglo(){
 		return idArreglo;
 	}
@@ -57,6 +60,28 @@ public class Arreglo {
 	public void setCostoArreglo(float costoArreglo) {
 		this.costoArreglo = costoArreglo;
 	}
+
+	public void setEstado(boolean estado) {
+		// TODO Auto-generated method stub
+		this.estado=estado;
+	}
 	
+	public boolean getEstado(){
+		return this.estado;
+	}
+	
+	public void setIdArreglo(int idArr) {
+		// TODO Auto-generated method stub
+		idArreglo=idArr;
+	}
+	
+	public void update(){
+		AdmPersistenciaArreglo.getInstancia().update(this);
+	}
+	
+	public void delete(){
+		AdmPersistenciaArreglo.getInstancia().delete(this);
+	}
+
 	
 }

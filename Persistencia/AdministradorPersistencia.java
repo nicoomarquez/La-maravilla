@@ -2,15 +2,37 @@ package Persistencia;
 
 import java.util.Vector;
 
-public abstract class AdministradorPersistencia {
+/**
+ * Interfaz que adopta una clase cualesquiera mediante el Simbolo generico
+ * Todas clases que implementen esta interfaz podra hacer las operaciones 
+ * de CRUDL
+ * */
+public interface AdministradorPersistencia <T>{
 	
-	public abstract void insert(Object o);
+	/** 
+	 * 
+	 */
+	public void insert(T o);
 	
-	public abstract void delete(Object o);
+	 /** 
+	  * 
+	  */
+	 public void delete(T o);
+	 
+	 /** 
+	  * 
+	  */
+	 public void update(T o);
+	 
+	 /** 
+	  * 
+	  */	
+	public T select(String id);
+	 		 
+	 /** 
+	  * 
+	  */
+	public Vector<T> selectAll();
 	
-	public abstract void update(Object o);
-	
-	public abstract Vector<Object> select(Object o);
-	
-	
+	int getIdMaximo();
 }

@@ -3,7 +3,10 @@ package Controlador;
 import java.util.Vector;
 
 import Negocio.*;
+import Persistencia.AdmPersistenciaArreglo;
+import Persistencia.AdmPersistenciaBoleta;
 import Persistencia.AdmPersistenciaCliente;
+import Persistencia.AdmPersistenciaEmpleado;
 
 public class SARA {
 private static SARA instancia=null;
@@ -16,19 +19,33 @@ private static int codigoCalzado;
 
 	private SARA() {
 		// TODO Auto-generated constructor stub
-		empleados =	new Vector<Empleado>();
+		iniciarTodosLosAutoNumericos();
+		empleados =	(Vector<Empleado>) AdmPersistenciaEmpleado.getInstancia().selectAll();
 		boletas  =	new Vector<Boleta>();
 		clientes =	new Vector<Cliente>();
-		arreglos = new Vector<Arreglo>();
-		Arreglo a = new Arreglo("Suela rota", "Reparacion de suelas de zapatos para hombre", 90);
+		arreglos = (Vector<Arreglo>) AdmPersistenciaArreglo.getInstancia().selectAll();
+		/*Arreglo a = new Arreglo("Suela rota", "Reparacion de suelas de zapatos para hombre", 90);
 		Arreglo b = new Arreglo("Suela limpia", "Reparacion de suelas de zapatos para mujer", 50);
 		arreglos.add(a);
 		arreglos.add(b);
 		Empleado e = new Empleado("Luis", "Martinez", "San Juan 154", "20145785", "CABA", "11111111", "2-4548412-5");
 		empleados.add(e);
 		Empleado e1 = new Empleado("Jose", "Gomez", "San Juan 154", "20145785", "CABA", "11111111", "2-4548412-5");
-		empleados.add(e1);
+		empleados.add(e1);*/
 		administrador = new Administrador();
+	}
+
+	private void iniciarTodosLosAutoNumericos() {
+		// TODO Auto-generated method stub
+		int boletaMax=AdmPersistenciaBoleta.getInstancia().getIdMaximo();
+		int clienteMax=AdmPersistenciaCliente.getInstancia().getIdMaximo();
+		int empleadoMax=AdmPersistenciaEmpleado.getInstancia().getIdMaximo();
+		int arregloMax=AdmPersistenciaArreglo.getInstancia().getIdMaximo();
+		
+		Boleta.iniciarAutoNumerico(boletaMax);
+		Cliente.iniciarAutoNumerico(clienteMax);
+		Empleado.iniciarAutoNumerico(empleadoMax);
+		Arreglo.iniciarAutoNumerico(arregloMax);
 	}
 
 	public Vector<Empleado> getEmpleados() {
@@ -114,7 +131,7 @@ private static int codigoCalzado;
 		Cliente clienteNuevo = new Cliente(nombre, apellido, dni, mail, domicilio, localidad, codigoPostal);
 		clientes.add(clienteNuevo);
 		//inserto en la base de datos
-		clienteNuevo.insertarCliente(clienteNuevo);		
+		//clienteNuevo.insertarCliente(clienteNuevo); -> se hace en el constructor de cliente		
 	}
 
 	public Cliente buscarCliente(String dniIngresado) {
