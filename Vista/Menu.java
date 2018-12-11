@@ -1,4 +1,4 @@
-package Vista;
+package vista;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -57,6 +57,8 @@ public class Menu extends JFrame {
 		btnNewButton.setFont(new Font("Kalinga", Font.BOLD, 12));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Boletas.getInstancia().setLocationRelativeTo(null);
+				Boletas.getInstancia().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(72, 57, 130, 23);

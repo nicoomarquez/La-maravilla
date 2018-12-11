@@ -25,6 +25,14 @@ public class Boleta_View {
 		this.estadoRetiro=estadoRetiro;
 	}
 
+	@Override
+	public String toString(){
+		
+		
+		return "Calzados: "+calzadosView.size()+ " - "+fecha +" - "+ estadoRetiro;
+		
+	}
+	
 	public int getIdBoleta() {
 		return idBoleta;
 	}

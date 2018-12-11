@@ -7,6 +7,7 @@ import Persistencia.AdmPersistenciaArreglo;
 import Persistencia.AdmPersistenciaBoleta;
 import Persistencia.AdmPersistenciaCliente;
 import Persistencia.AdmPersistenciaEmpleado;
+import View.Boleta_View;
 
 public class SARA {
 private static SARA instancia=null;
@@ -142,8 +143,8 @@ private static int codigoCalzado;
 		}
 		//busco en la base de datos
 		Cliente c = AdmPersistenciaCliente.getInstancia().buscarCliente(dniIngresado);
-		if (c != null) return c;
-		return null;
+		if (c != null) clientes.add(c);
+		return c;
 	}
 	
 	private static int getProximoNumero() {
@@ -152,19 +153,47 @@ private static int codigoCalzado;
 
 	public static String getCodigoBota() {
 		String codigo = Integer.toString(getProximoNumero()-1);
-		return 'B'+ codigo;
+		return "B00"+ codigo;
 	}
 	public static String getCodigoZapatilla() {
 		String codigo = Integer.toString(getProximoNumero()-1);
-		return 'Z'+ codigo;
+		return "Z00"+ codigo;
 	}
 	public static String getCodigoZapatoHombre() {
 		String codigo = Integer.toString(getProximoNumero()-1);
-		return "ZH"+ codigo;
+		return "ZH00"+ codigo;
 	}
 	public static String getCodigoZapatoMujer() {
 		String codigo = Integer.toString(getProximoNumero()-1);
-		return "ZM"+ codigo;
+		return "ZM00"+ codigo;
 	}
 	
+	public Empleado buscarEmpleado(int idEmpleado) {
+		//busco en memoria
+		for(int i = 0; i < empleados.size(); i++) {
+			if(empleados.elementAt(i).getIdEmpleado()==idEmpleado)
+				return empleados.elementAt(i);
+		}
+		//busco en la base de datos
+		Empleado e = AdmPersistenciaEmpleado.getInstancia().select(String.valueOf(idEmpleado));
+		if (e != null) empleados.add(e);
+		return e;
+	}
+
+	public Boleta buscarBoleta(int idBoleta){
+		Boleta boleta=null;
+		for(Boleta b:boletas)
+			if(b.getIdBoleta()==(idBoleta))
+				return b;
+			
+		boleta=AdmPersistenciaBoleta.getInstancia().select(String.valueOf(boleta));
+		if(boleta!=null) boletas.add(boleta);
+		
+		return boleta;
+	}
+	
+	public Vector<Boleta_View> obtenerBoletasDeCliente(String dniCliente){
+		Vector<Boleta_View> boletasCliente=AdmPersistenciaBoleta.getInstancia().buscarBoletasCliente(dniCliente);
+		return boletasCliente;
+	}
 }
