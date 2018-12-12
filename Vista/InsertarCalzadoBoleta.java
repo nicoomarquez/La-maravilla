@@ -37,6 +37,7 @@ import Negocio.Empleado;
 import Persistencia.AdmPersistenciaBoleta;
 import Persistencia.AdmPersistenciaCalzado;
 import Persistencia.AdmPersistenciaEmpleado;
+import View.Calzado_View;
 
 import java.awt.Color;
 import javax.swing.JScrollPane;
@@ -63,7 +64,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 	private String categoria;
 	
 	// Se crea el vector en donde se guardarán los calzados agregados
-	private Vector<Calzado> calzados = new Vector<Calzado>();
+	private Vector<Calzado_View> calzados = new Vector<Calzado_View>();
 	
 	public static InsertarCalzadoBoleta getInstancia() {
 		if(instancia == null)
@@ -214,8 +215,8 @@ public class InsertarCalzadoBoleta extends JFrame {
 				// Lo busco en la base de datos
 				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
 				
-				//Para crear un calzado necesito: (String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos)
-				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), emp, arreglos);
+				// Creo un calzadoView porque todavía no se inserta en la bd
+				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
 				
 				// Agrego el calzado actual
 				calzados.add(calzado);
@@ -285,8 +286,8 @@ public class InsertarCalzadoBoleta extends JFrame {
 				// Lo busco en la base de datos
 				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
 				
-				//Para crear un calzado necesito: (String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos)
-				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), emp, arreglos);
+				// Creo un calzadoView porque todavía no se inserta en la bd
+				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
 				
 				// Agrego el calzado actual
 				calzados.add(calzado);

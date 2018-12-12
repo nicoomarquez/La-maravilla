@@ -13,6 +13,7 @@ import Negocio.Calzado;
 import Negocio.Cliente;
 import Persistencia.AdmPersistenciaBoleta;
 import Persistencia.AdmPersistenciaCliente;
+import View.Calzado_View;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -43,7 +44,7 @@ public class ResumenBoleta extends JFrame {
 	private static ResumenBoleta instancia;
 	
 	public static ResumenBoleta getInstancia() {
-		Vector<Calzado> calzados = new Vector<Calzado>();
+		Vector<Calzado_View> calzados = new Vector<Calzado_View>();
 		String dni = null;
 		if(instancia == null)
 			instancia = new ResumenBoleta(calzados, dni);
@@ -53,27 +54,27 @@ public class ResumenBoleta extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Vector<Calzado> calzados = null;
-					String dni = null;
-					ResumenBoleta frame = new ResumenBoleta(calzados, dni);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Vector<Calzado> calzados = null;
+//					String dni = null;
+//					ResumenBoleta frame = new ResumenBoleta(calzados, dni);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 * @param calzados 
 	 * @param dni 
 	 */
-	public ResumenBoleta(Vector<Calzado> calzados, String dni) {
+	public ResumenBoleta(Vector<Calzado_View> calzados, String dni) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 450);
 		contentPane = new JPanel();
@@ -196,8 +197,8 @@ public class ResumenBoleta extends JFrame {
 			@Override
 			// Calcular el monto total según la seña que se ingresa
 			public void keyReleased(KeyEvent arg0) {
-				int res = Integer.parseInt(importe.getText()) - Integer.parseInt(seña.getText());
-				montoTotal.setText(Integer.toString(res));
+				float res = Float.parseFloat(importe.getText()) - Float.parseFloat(seña.getText());
+				montoTotal.setText(Float.toString(res));
 			}
 		});
 		seña.setBounds(284, 323, 58, 20);
@@ -239,10 +240,11 @@ public class ResumenBoleta extends JFrame {
 				// Fecha de hoy
 				Date fecha = Date.valueOf(LocalDate.now());
 				
-				// Se crea la boleta
-				Boleta boleta = new Boleta(cliente, Integer.parseInt(montoTotal.getText()), Integer.parseInt(seña.getText()), fecha, calzados);
+				// Se crea la boleta, NECESITO PASARLE UN VECTOR DE CALZADOS
+				// PERO TENGO UN VECTOR DE CALZADOS_VIEW (VER COMO HACER)
+				// Boleta boleta = new Boleta(cliente, Integer.parseInt(montoTotal.getText()), Integer.parseInt(seña.getText()), fecha, calzados);
 				
-				if(boleta != null) JOptionPane.showMessageDialog(null, "Boleta generada con éxito");
+				// if(boleta != null) JOptionPane.showMessageDialog(null, "Boleta generada con éxito");
 			}
 		});
 		btnAceptar.setBounds(226, 379, 89, 23);
@@ -255,12 +257,12 @@ public class ResumenBoleta extends JFrame {
 		list.setBounds(94, 191, 326, 111);
 		contentPane.add(list);
 		
-		int total = 0;
+		float total = 0;
 		for ( int i = 0; i < calzados.size(); i++ ){
-		  model.addElement("Código: " + calzados.elementAt(i).getCodigoCalzado() + " - $" + calzados.elementAt(i).getCostoCalzado() + " - Cant. de arreglos: " + calzados.elementAt(i).getArreglos().size());
-		  total += calzados.elementAt(i).getCostoCalzado();
+		  model.addElement("Código: " + calzados.elementAt(i).getCodigo() + " - $" + calzados.elementAt(i).getCosto() + " - Cant. de arreglos: " + calzados.elementAt(i).getArreglos().size());
+		  total += Float.parseFloat(calzados.elementAt(i).getCosto());
 		}
-		importe.setText(Integer.toString(total));
+		importe.setText(Float.toString(total));
 		
 		
 	}
