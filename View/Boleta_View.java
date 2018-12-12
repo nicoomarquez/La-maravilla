@@ -29,7 +29,7 @@ public class Boleta_View {
 	public String toString(){
 		
 		
-		return "Calzados: "+calzadosView.size()+ " - "+fecha +" - "+ estadoRetiro;
+		return  idBoleta + " - Calzados: "+calzadosView.size()+ " - "+fecha +" - "+ estadoRetiro;
 		
 	}
 	

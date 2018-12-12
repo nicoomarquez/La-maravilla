@@ -145,12 +145,31 @@ public class AdmPersistenciaCalzado implements AdministradorPersistencia<Calzado
 		return calzados;
 	}
 
-	@Override
-	public int getIdMaximo() {
-		// TODO Auto-generated method stub
-		System.out.println("MaxId calzado a implementar");
-		return 0;
-	}
+	public String getidMaximo(String categoria){	
+		
+		String id="";
+		Connection c=PoolConnection.getPoolConnection().getConnection();
+		ResultSet rs;
+		PreparedStatement s;
+		String sql="Select codigoCalzado from "+ db +".Calzado where codigoCalzado like ? order by 1 desc";
+		
+		try{
+			s=c.prepareStatement(sql);
+			s.setString(1, "%" + categoria + "%");
+			rs=s.executeQuery();
+			PoolConnection.getPoolConnection().realeaseConnection(c);
+			if(rs.next()){
+				String codigo=rs.getString(1);
+				int ini=codigo.indexOf(categoria);
+				id=codigo.substring(ini+categoria.length());
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return id;
+	
+}
 
 	public Vector<Calzado_View> selectAllToView(int idBoleta) {//Funciona
 		// TODO Auto-generated method stub
@@ -160,6 +179,12 @@ public class AdmPersistenciaCalzado implements AdministradorPersistencia<Calzado
 		for(Calzado c:calzados)
 			cv.add(c.toView());
 		return cv;
+	}
+
+	@Override
+	public int getIdMaximo() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

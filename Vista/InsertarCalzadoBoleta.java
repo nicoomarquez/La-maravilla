@@ -30,10 +30,14 @@ import javax.swing.border.LineBorder;
 
 import Controlador.SARA;
 import Negocio.Arreglo;
+import Negocio.Boleta;
 import Negocio.Calzado;
 import Negocio.Cliente;
 import Negocio.Empleado;
+import Persistencia.AdmPersistenciaBoleta;
+import Persistencia.AdmPersistenciaCalzado;
 import Persistencia.AdmPersistenciaEmpleado;
+import View.Calzado_View;
 
 import java.awt.Color;
 import javax.swing.JScrollPane;
@@ -60,7 +64,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 	private String categoria;
 	
 	// Se crea el vector en donde se guardarán los calzados agregados
-	private Vector<Calzado> calzados = new Vector<Calzado>();
+	private Vector<Calzado_View> calzados = new Vector<Calzado_View>();
 	
 	public static InsertarCalzadoBoleta getInstancia() {
 		if(instancia == null)
@@ -211,8 +215,8 @@ public class InsertarCalzadoBoleta extends JFrame {
 				// Lo busco en la base de datos
 				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
 				
-				//Para crear un calzado necesito: (String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos)
-				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), emp, arreglos);
+				// Creo un calzadoView porque todavía no se inserta en la bd
+				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
 				
 				// Agrego el calzado actual
 				calzados.add(calzado);
@@ -282,8 +286,8 @@ public class InsertarCalzadoBoleta extends JFrame {
 				// Lo busco en la base de datos
 				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
 				
-				//Para crear un calzado necesito: (String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos)
-				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), emp, arreglos);
+				// Creo un calzadoView porque todavía no se inserta en la bd
+				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
 				
 				// Agrego el calzado actual
 				calzados.add(calzado);
@@ -311,8 +315,15 @@ public class InsertarCalzadoBoleta extends JFrame {
 		//Acción que se realiza cuando se selecciona el botón
 		rdbtnBota.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				codigoCalzado.setText(SARA.getCodigoBota());
-				categoria = "B";
+				
+				// Retomo en el último autonumérico
+				String codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("B");
+				
+				// getidMaximo me devuelve la parte numérica (por ej. 000, 001)
+				int codCalzadoNuevo = Integer.parseInt(codCalzado) + 1;
+				
+				// Agrego la letra de la categoría
+				codigoCalzado.setText("B" + Integer.toString(codCalzadoNuevo));
 			}
 		});
 		botones.add(rdbtnBota);
@@ -323,9 +334,15 @@ public class InsertarCalzadoBoleta extends JFrame {
 		//Acción que se realiza cuando se selecciona el botón
 		rdbtnZapatilla.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Generación del código 
-				codigoCalzado.setText(SARA.getCodigoZapatilla());
-				categoria = "Z";
+		
+				// Retomo en el último autonumérico
+				String codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("Z");
+				
+				// getidMaximo me devuelve la parte numérica (por ej. 000, 001)
+				int codCalzadoNuevo = Integer.parseInt(codCalzado) + 1;
+				
+				// Agrego la letra de la categoría
+				codigoCalzado.setText("Z" + Integer.toString(codCalzadoNuevo));
 			}
 		});
 		botones.add(rdbtnZapatilla);
@@ -335,8 +352,15 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JRadioButton rdbtnZapatoHombre = new JRadioButton("Zapato Hombre");
 		rdbtnZapatoHombre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				codigoCalzado.setText(SARA.getCodigoZapatoHombre());
-				categoria = "ZH";
+				
+				// Retomo en el último autonumérico
+				String codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("ZH");
+				
+				// getidMaximo me devuelve la parte numérica (por ej. 000, 001)
+				int codCalzadoNuevo = Integer.parseInt(codCalzado) + 1;
+				
+				// Agrego la letra de la categoría
+				codigoCalzado.setText("ZH" + Integer.toString(codCalzadoNuevo));
 			}
 		});
 		botones.add(rdbtnZapatoHombre);
@@ -346,8 +370,15 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JRadioButton rdbtnZapatoMujer = new JRadioButton("Zapato Mujer");
 		rdbtnZapatoMujer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				codigoCalzado.setText(SARA.getCodigoZapatoMujer());
-				categoria = "ZM";
+				
+				// Retomo en el último autonumérico
+				String codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("ZM");
+				
+				// getidMaximo me devuelve la parte numérica (por ej. 000, 001)
+				int codCalzadoNuevo = Integer.parseInt(codCalzado) + 1;
+				
+				// Agrego la letra de la categoría
+				codigoCalzado.setText("ZM" + Integer.toString(codCalzadoNuevo));
 			}
 		});
 		botones.add(rdbtnZapatoMujer);

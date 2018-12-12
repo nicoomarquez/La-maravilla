@@ -9,11 +9,17 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import Controlador.SARA;
+import Negocio.Boleta;
+import Negocio.Cliente;
+import Negocio.Empleado;
+import Persistencia.AdmPersistenciaBoleta;
+import Persistencia.AdmPersistenciaEmpleado;
 import View.Boleta_View;
 import javax.swing.DefaultComboBoxModel;
 
@@ -66,23 +72,40 @@ public class Boletas extends JFrame {
 		btnNewBuscar = new JButton("Buscar");
 		btnNewBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				bv=SARA.getInstancia().obtenerBoletasDeCliente(textFieldDni.getText());
 				
-				DefaultComboBoxModel<String> df=new DefaultComboBoxModel<String>();
-				for(Boleta_View b:bv){
-					df.addElement(b.toString());
-				}
-				comboBoxBoletas.setModel(df);
+				// Verifico que el campo no esté vacío
+				if(textFieldDni.getText().isEmpty())
+					JOptionPane.showMessageDialog(null, "Ingrese un DNI para continuar");
+				else { 
+					// Verifico que el dni ingresado corresponda a un cliente
+					Cliente cliente =  SARA.getInstancia().buscarCliente(textFieldDni.getText());
+					if(cliente == null)
+						JOptionPane.showMessageDialog(null, "No existe cliente con el DNI ingresado");
+					else {
+						// Busco las boletas
+						bv=SARA.getInstancia().obtenerBoletasDeCliente(textFieldDni.getText());
 				
-				panel.setVisible(true);
+						// Pregunto si el cliente boletas
+						if(bv.size() == 0) 
+							JOptionPane.showMessageDialog(null, "El cliente no tiene boletas para mostrar");
+					
+						DefaultComboBoxModel<String> df=new DefaultComboBoxModel<String>();
+						for(Boleta_View b:bv){
+							df.addElement(b.toString());
+						}
+						comboBoxBoletas.setModel(df);
 				
+						panel.setVisible(true);
+						btnVerBoleta.setEnabled(true);
+					}	
+				}	
 			}
 		});
-		btnNewBuscar.setBounds(300, 26, 89, 23);
+		btnNewBuscar.setBounds(304, 26, 89, 23);
 		contentPane.add(btnNewBuscar);
 		
 		panel = new JPanel();
-		panel.setBounds(10, 74, 414, 161);
+		panel.setBounds(10, 74, 414, 136);
 		panel.setVisible(false);
 		contentPane.add(panel);
 		panel.setLayout(null);
@@ -95,19 +118,35 @@ public class Boletas extends JFrame {
 		comboBoxBoletas.setBounds(72, 8, 186, 20);
 		panel.add(comboBoxBoletas);
 		
-		btnVerBoleta = new JButton("Ver boleta");
-		btnVerBoleta.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int pos=comboBoxBoletas.getSelectedIndex();
-				if(pos>-1)
-					System.out.print("Mostrando resumen de boleta");
+		btnAtras = new JButton("Atr\u00E1s");
+		btnAtras.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Menu.getInstancia().setLocationRelativeTo(null);
+				Menu.getInstancia().setVisible(true);
 			}
 		});
-		btnVerBoleta.setBounds(223, 117, 117, 33);
-		panel.add(btnVerBoleta);
+		btnAtras.setBounds(99, 221, 100, 23);
+		contentPane.add(btnAtras);
 		
-		btnAtras = new JButton("Atr\u00E1s");
-		btnAtras.setBounds(72, 117, 117, 33);
-		panel.add(btnAtras);
+		btnVerBoleta = new JButton("Ver boleta");
+		btnVerBoleta.setEnabled(false);
+		btnVerBoleta.setBounds(226, 221, 100, 23);
+		contentPane.add(btnVerBoleta);
+		btnVerBoleta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				// Obtengo el ID de la boleta seleccionada
+				String idBoleta = (String) comboBoxBoletas.getSelectedItem();
+				String[] id = idBoleta.split(" ");
+				
+				// La busco en la base de datos
+				Boleta bol = AdmPersistenciaBoleta.getInstancia().select(id[0]);
+				
+				// Paso la boleta para la siguiente ventana
+				BoletaCliente bc = new BoletaCliente(bol);
+				bc.setVisible(true);
+			}
+		});
 	}
 }
