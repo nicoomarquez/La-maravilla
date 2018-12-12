@@ -115,7 +115,7 @@ public class Boletas extends JFrame {
 		panel.add(lblBoletas);
 		
 		comboBoxBoletas = new JComboBox<String>();
-		comboBoxBoletas.setBounds(72, 8, 186, 20);
+		comboBoxBoletas.setBounds(72, 8, 312, 20);
 		panel.add(comboBoxBoletas);
 		
 		btnAtras = new JButton("Atr\u00E1s");

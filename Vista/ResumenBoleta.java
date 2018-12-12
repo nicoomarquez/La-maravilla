@@ -237,7 +237,7 @@ public class ResumenBoleta extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(seña.getText().isEmpty() || importe.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Ingrese seña y/o monto a pagar por favor");
+					JOptionPane.showMessageDialog(null, "Ingrese seña y/o monto para continuar");
 				}
 				else {
 				

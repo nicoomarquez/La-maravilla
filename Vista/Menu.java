@@ -77,16 +77,19 @@ public class Menu extends JFrame {
 		contentPane.add(btnNewButton_1);
 		
 		JButton btnArreglos = new JButton("ARREGLOS");
+		btnArreglos.setEnabled(false);
 		btnArreglos.setFont(new Font("Kalinga", Font.BOLD, 12));
 		btnArreglos.setBounds(72, 109, 130, 23);
 		contentPane.add(btnArreglos);
 		
 		JButton btnEmpleados = new JButton("EMPLEADOS");
+		btnEmpleados.setEnabled(false);
 		btnEmpleados.setFont(new Font("Kalinga", Font.BOLD, 12));
 		btnEmpleados.setBounds(225, 109, 130, 23);
 		contentPane.add(btnEmpleados);
 		
 		JButton btnMail = new JButton("MAIL");
+		btnMail.setEnabled(false);
 		btnMail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}

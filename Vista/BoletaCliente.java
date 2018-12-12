@@ -115,14 +115,15 @@ public class BoletaCliente extends JFrame {
 		
 		DefaultListModel<String> model = new DefaultListModel<>();
 		JList<String> list = new JList<>( model );
-		list.setBounds(106, 118, 302, 165);
+		list.setBounds(75, 118, 349, 165);
 		contentPane.add(list);
 		
 		for (int i = 0; i < bol.getCalzados().size(); i++){
 			for(int j = 0; j < bol.getCalzados().elementAt(i).getArreglos().size(); j++)
 			model.addElement("Código: " + bol.getCalzados().elementAt(i).getCodigoCalzado() +
 							" - $" + bol.getCalzados().elementAt(i).getCostoCalzado() +
-							" Arreglos: " + bol.getCalzados().elementAt(i).getArreglos().elementAt(j).getNombre() );
+							" Arreglos: " + bol.getCalzados().elementAt(i).getArreglos().elementAt(j).getNombre() +
+							" - Estado: " + bol.getCalzados().elementAt(i).getEstado());
 		}
 		
 		JLabel lblSea = new JLabel("Se\u00F1a:");

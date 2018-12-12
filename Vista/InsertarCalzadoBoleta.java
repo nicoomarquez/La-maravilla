@@ -36,6 +36,7 @@ import Negocio.Cliente;
 import Negocio.Empleado;
 import Persistencia.AdmPersistenciaBoleta;
 import Persistencia.AdmPersistenciaCalzado;
+import Persistencia.AdmPersistenciaCliente;
 import Persistencia.AdmPersistenciaEmpleado;
 import View.Calzado_View;
 
@@ -53,7 +54,6 @@ public class InsertarCalzadoBoleta extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField dni;
-	private JTextField observaciones;
 	private JTextField codigoCalzado;
 	private static JTextField importe;
 	private static InsertarCalzadoBoleta instancia;
@@ -65,6 +65,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 	
 	// Se crea el vector en donde se guardarán los calzados agregados
 	private Vector<Calzado_View> calzados = new Vector<Calzado_View>();
+	private JTextField nombreCliente;
 	
 	public static InsertarCalzadoBoleta getInstancia() {
 		if(instancia == null)
@@ -101,24 +102,24 @@ public class InsertarCalzadoBoleta extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(20, 135, 462, 382);
+		panel.setBounds(20, 135, 462, 333);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		panel.setVisible(false);
 		
 		JLabel lblZapateraLaMaravilla = new JLabel("Zapater\u00EDa La Maravilla ");
 		lblZapateraLaMaravilla.setFont(new Font("Trebuchet MS", Font.PLAIN, 19));
-		lblZapateraLaMaravilla.setBounds(111, 11, 215, 33);
+		lblZapateraLaMaravilla.setBounds(162, 11, 215, 33);
 		contentPane.add(lblZapateraLaMaravilla);
 		
 		JLabel lblComposturaDeCalzados = new JLabel("Compostura de Calzados");
 		lblComposturaDeCalzados.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblComposturaDeCalzados.setBounds(111, 40, 213, 28);
+		lblComposturaDeCalzados.setBounds(153, 38, 213, 28);
 		contentPane.add(lblComposturaDeCalzados);
 		
 		JLabel lblLavalle = new JLabel("Lavalle 587 - Quilmes");
 		lblLavalle.setFont(new Font("Tahoma", Font.ITALIC, 18));
-		lblLavalle.setBounds(121, 68, 177, 28);
+		lblLavalle.setBounds(173, 68, 177, 28);
 		contentPane.add(lblLavalle);
 		
 		JLabel lblCliente = new JLabel("CLIENTE:");
@@ -141,7 +142,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 		contentPane.add(btnNuevoCliente);
 		
 		JLabel lblArreglos = new JLabel("Arreglo/s:");
-		lblArreglos.setBounds(5, 19, 55, 14);
+		lblArreglos.setBounds(5, 88, 55, 14);
 		panel.add(lblArreglos);
 		
 		//Le pido al controlador que me de los arreglos
@@ -150,15 +151,6 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(5, 186, 436, 1);
 		panel.add(separator_1);
-		
-		JLabel lblObservaciones = new JLabel("Observaciones:");
-		lblObservaciones.setBounds(5, 126, 92, 14);
-		panel.add(lblObservaciones);
-		
-		observaciones = new JTextField();
-		observaciones.setBounds(105, 126, 263, 49);
-		panel.add(observaciones);
-		observaciones.setColumns(10);
 		
 		JLabel lblEmpleado = new JLabel("Empleado:");
 		lblEmpleado.setBounds(5, 208, 68, 14);
@@ -204,43 +196,6 @@ public class InsertarCalzadoBoleta extends JFrame {
 		label_2.setBounds(77, 295, 20, 14);
 		panel.add(label_2);
 		
-		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				// Obtengo el ID del empleado seleccionado
-				String empleado = (String) empleados.getSelectedItem();	
-				String[] id = empleado.split(" ");
-				
-				// Lo busco en la base de datos
-				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
-				
-				// Creo un calzadoView porque todavía no se inserta en la bd
-				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
-				
-				// Agrego el calzado actual
-				calzados.add(calzado);
-				
-				ResumenBoleta rb = new ResumenBoleta(calzados, dni.getText());
-				rb.setVisible(true);
-			}
-
-			
-		});
-		btnGuardar.setBounds(316, 341, 89, 23);
-		panel.add(btnGuardar);
-		
-		JButton btnAtrs = new JButton("Atr\u00E1s");
-		btnAtrs.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-				Menu.getInstancia().setLocationRelativeTo(null);
-				Menu.getInstancia().setVisible(true);
-			}
-		});
-		btnAtrs.setBounds(38, 341, 89, 23);
-		panel.add(btnAtrs);
-		
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -254,52 +209,17 @@ public class InsertarCalzadoBoleta extends JFrame {
 				}
 				//Obtengo el cliente con el dni ingresado
 				else {
-					
-					//Cliente cliente = SARA.getInstancia().buscarCliente(dni.getText());
-//					if(botonNo.isSelected()) {
-//						lblNewLabel.setEnabled(false);
-//						chckbxLunes.setEnabled(false);
-//						chckbxMartes.setEnabled(false);
-//						chckbxMircoles.setEnabled(false);
-//						chckbxJueves.setEnabled(false);
-//						chckbxViernes.setEnabled(false);
-//						lblHorario.setEnabled(false);
-//						horario1.setEnabled(false);
-//						horario2.setEnabled(false);
 						panel.setVisible(true);
-//					}
+						
+						// Inserto nombre del cliente
+						Cliente cliente = AdmPersistenciaCliente.getInstancia().buscarCliente(dni.getText());
+						nombreCliente.setText(cliente.getNombre() + " " +cliente.getApellido());
 				}
 				
 			}
 		});
 		btnBuscar.setBounds(237, 107, 89, 23);
 		contentPane.add(btnBuscar);
-		
-		JButton btnAgregarOtroCalzado = new JButton("Agregar otro calzado");
-		btnAgregarOtroCalzado.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				// Obtengo el ID del empleado seleccionado
-				String empleado = (String) empleados.getSelectedItem();	
-				String[] id = empleado.split(" ");
-				
-				// Lo busco en la base de datos
-				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
-				
-				// Creo un calzadoView porque todavía no se inserta en la bd
-				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
-				
-				// Agrego el calzado actual al vector de Calzados_View
-				calzados.add(calzado);
-				
-				// Se limpia la pantalla para agregar otro calzado
-				limpiarPantalla();
-			}
-
-			
-		});
-		btnAgregarOtroCalzado.setBounds(147, 341, 152, 23);
-		panel.add(btnAgregarOtroCalzado);
 		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setBounds(9, 280, 443, 2);
@@ -399,13 +319,92 @@ public class InsertarCalzadoBoleta extends JFrame {
 				j.setLocationRelativeTo(null);
 			}
 		});
-		btnSeleccionarArreglos.setBounds(70, 15, 221, 23);
+		btnSeleccionarArreglos.setBounds(68, 84, 221, 23);
 		panel.add(btnSeleccionarArreglos);
 		
 		JScrollPane scrollPane = new JScrollPane(list);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(37, 60, 383, 40);
+		scrollPane.setBounds(39, 123, 383, 40);
 		panel.add(scrollPane);
+		
+		JLabel lblBoletaPara = new JLabel("Boleta para:");
+		lblBoletaPara.setBounds(5, 22, 92, 14);
+		panel.add(lblBoletaPara);
+		
+		nombreCliente = new JTextField();
+		nombreCliente.setEditable(false);
+		nombreCliente.setBounds(105, 19, 216, 20);
+		panel.add(nombreCliente);
+		nombreCliente.setColumns(10);
+		
+		JButton btnAtrs = new JButton("Atr\u00E1s");
+		btnAtrs.setBounds(30, 479, 89, 23);
+		contentPane.add(btnAtrs);
+		
+		JButton btnAgregarOtroCalzado = new JButton("Agregar otro calzado");
+		btnAgregarOtroCalzado.setEnabled(false);
+		btnAgregarOtroCalzado.setBounds(152, 479, 169, 23);
+		contentPane.add(btnAgregarOtroCalzado);
+		
+		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.setEnabled(false);
+		btnGuardar.setBounds(362, 479, 89, 23);
+		contentPane.add(btnGuardar);
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// Obtengo el ID del empleado seleccionado
+				String empleado = (String) empleados.getSelectedItem();	
+				String[] id = empleado.split(" ");
+				
+				// Lo busco en la base de datos
+				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
+				
+				// Creo un calzadoView porque todavía no se inserta en la bd
+				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
+				
+				// Agrego el calzado actual
+				calzados.add(calzado);
+				
+				ResumenBoleta rb = new ResumenBoleta(calzados, dni.getText());
+				dispose();
+				rb.setVisible(true);
+			}
+
+			
+		});
+		btnAgregarOtroCalzado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(!rdbtnZapatilla.isSelected() || !rdbtnZapatoMujer.isSelected() || !rdbtnZapatoHombre.isSelected() || !rdbtnBota.isSelected()) {
+					JOptionPane.showMessageDialog(null, "Seleccione una categoria para continuar");
+				}
+				// Obtengo el ID del empleado seleccionado
+				String empleado = (String) empleados.getSelectedItem();	
+				String[] id = empleado.split(" ");
+				
+				// Lo busco en la base de datos
+				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
+				
+				// Creo un calzadoView porque todavía no se inserta en la bd
+				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
+				
+				// Agrego el calzado actual al vector de Calzados_View
+				calzados.add(calzado);
+				
+				// Se limpia la pantalla para agregar otro calzado
+				limpiarPantalla();
+			}
+
+			
+		});
+		btnAtrs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Menu.getInstancia().setLocationRelativeTo(null);
+				Menu.getInstancia().setVisible(true);
+			}
+		});
 		
 	}
 	
@@ -439,7 +438,6 @@ public class InsertarCalzadoBoleta extends JFrame {
 	}
 	
 	private void limpiarPantalla() {
-		observaciones.setText("");
 		importe.setText("");
 		codigoCalzado.setText("");
 		
