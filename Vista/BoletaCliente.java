@@ -156,11 +156,15 @@ public class BoletaCliente extends JFrame {
 				Boletas.getInstancia().setVisible(true);
 			}
 		});
-		btnAtrs.setBounds(171, 336, 89, 23);
+		btnAtrs.setBounds(74, 336, 89, 23);
 		contentPane.add(btnAtrs);
 		
 		JScrollBar scrollBar = new JScrollBar();
 		scrollBar.setBounds(391, 119, 17, 98);
 		contentPane.add(scrollBar);
+		
+		JButton btnActualizarEstadoCalzado = new JButton("Actualizar estado calzado");
+		btnActualizarEstadoCalzado.setBounds(191, 336, 197, 23);
+		contentPane.add(btnActualizarEstadoCalzado);
 	}
 }
