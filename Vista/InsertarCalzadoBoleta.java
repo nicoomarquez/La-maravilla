@@ -289,7 +289,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 				// Creo un calzadoView porque todavía no se inserta en la bd
 				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
 				
-				// Agrego el calzado actual
+				// Agrego el calzado actual al vector de Calzados_View
 				calzados.add(calzado);
 				
 				// Se limpia la pantalla para agregar otro calzado
@@ -317,10 +317,10 @@ public class InsertarCalzadoBoleta extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				// Retomo en el último autonumérico
-				String codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("B");
+				int codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("B");
 				
 				// getidMaximo me devuelve la parte numérica (por ej. 000, 001)
-				int codCalzadoNuevo = Integer.parseInt(codCalzado) + 1;
+				int codCalzadoNuevo = codCalzado + 1;
 				
 				// Agrego la letra de la categoría
 				codigoCalzado.setText("B" + Integer.toString(codCalzadoNuevo));
@@ -336,10 +336,10 @@ public class InsertarCalzadoBoleta extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 		
 				// Retomo en el último autonumérico
-				String codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("Z");
+				int codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("Z");
 				
 				// getidMaximo me devuelve la parte numérica (por ej. 000, 001)
-				int codCalzadoNuevo = Integer.parseInt(codCalzado) + 1;
+				int codCalzadoNuevo = codCalzado + 1;
 				
 				// Agrego la letra de la categoría
 				codigoCalzado.setText("Z" + Integer.toString(codCalzadoNuevo));
@@ -354,10 +354,10 @@ public class InsertarCalzadoBoleta extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				// Retomo en el último autonumérico
-				String codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("ZH");
+				int codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("ZH");
 				
 				// getidMaximo me devuelve la parte numérica (por ej. 000, 001)
-				int codCalzadoNuevo = Integer.parseInt(codCalzado) + 1;
+				int codCalzadoNuevo = codCalzado + 1;
 				
 				// Agrego la letra de la categoría
 				codigoCalzado.setText("ZH" + Integer.toString(codCalzadoNuevo));
@@ -372,10 +372,10 @@ public class InsertarCalzadoBoleta extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				// Retomo en el último autonumérico
-				String codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("ZM");
+				int codCalzado = AdmPersistenciaCalzado.getInstancia().getidMaximo("ZM");
 				
 				// getidMaximo me devuelve la parte numérica (por ej. 000, 001)
-				int codCalzadoNuevo = Integer.parseInt(codCalzado) + 1;
+				int codCalzadoNuevo = codCalzado + 1;
 				
 				// Agrego la letra de la categoría
 				codigoCalzado.setText("ZM" + Integer.toString(codCalzadoNuevo));

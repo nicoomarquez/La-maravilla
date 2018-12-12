@@ -12,6 +12,9 @@ public class Calzado {
 	private Empleado empleado;
 	private char estado;
 	
+	private int codigoZapatilla,codigoBota, codigoZH, codigoZM;
+	private static int autoZapatilla,autoBota,autoZH,autoZM;
+	
 	public Calzado(){
 		arreglos = new Vector<Arreglo>();
 		empleado = new Empleado();		
@@ -79,5 +82,60 @@ public class Calzado {
 	public Calzado_View toView() {
 		// TODO Auto-generated method stub
 		return new Calzado_View(codigoCalzado,codigoCalzado.substring(0, 2),String.valueOf(costoCalzado),estado,empleado.getIdEmpleado(),arreglos);
+	}
+	
+	public static void iniciarAutoNumerico(int nro, String cat){
+		switch(cat){
+			case "B": autoBota=nro;
+				break;
+			case "Z": autoZapatilla=nro;
+				break;
+			case "ZH" : autoZH=nro;
+				break;
+			case "ZM": autoZM=nro;
+				break;
+			default: System.out.println("Categoria incorrecta");
+		}
+	}
+	
+	/**Dado la categoria te devuelve el supuesto id que va a tener, no modifica el autonumerico*/
+	public String getCodigoSinIncrementar(String cat){
+		String res="";
+		switch(cat){
+			case "B": 
+				if(autoBota==0) res=cat+(autoBota+1);
+				else res=cat+autoBota;
+				
+				break;
+			case "Z": if(autoZapatilla==0)res=cat+(autoZapatilla+1);
+					  else res=cat+autoZapatilla;
+				break;
+			case "ZH" : 
+					  if(autoZH==0) res=cat+(autoZH+1);
+					  else res=cat+autoZH;
+				break;
+			case "ZM": 
+					  if(autoZM==0) res=cat+(autoZH+1);
+					  else res=cat+autoZM;
+				break;
+			default: System.out.println("Categoria incorrecta");
+		}
+		return res;
+	}
+	
+	public String getCodigo(String cat){
+		String res="";
+		switch(cat){
+			case "B": res=cat+(++autoBota);
+				break;
+			case "Z": res=cat+(++autoZapatilla);
+				break;
+			case "ZH" : res=cat+(++autoZH);
+				break;
+			case "ZM": res=cat+(++autoZM);
+				break;
+			default: System.out.println("Categoria incorrecta");
+		}
+		return res;
 	}
 }

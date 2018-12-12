@@ -11,8 +11,10 @@ import javax.swing.border.EmptyBorder;
 import Negocio.Boleta;
 import Negocio.Calzado;
 import Negocio.Cliente;
+import Negocio.Empleado;
 import Persistencia.AdmPersistenciaBoleta;
 import Persistencia.AdmPersistenciaCliente;
+import Persistencia.AdmPersistenciaEmpleado;
 import View.Calzado_View;
 
 import javax.swing.JLabel;
@@ -234,17 +236,44 @@ public class ResumenBoleta extends JFrame {
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				// Para crear un boleta, necesito el cliente, lo consigo con el dni
-				Cliente cliente = AdmPersistenciaCliente.getInstancia().buscarCliente(dni);
+				if(seña.getText().isEmpty() || importe.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Ingrese seña y/o monto a pagar por favor");
+				}
+				else {
 				
-				// Fecha de hoy
-				Date fecha = Date.valueOf(LocalDate.now());
+					// Para crear un boleta, necesito el cliente, lo consigo con el dni
+					Cliente cliente = AdmPersistenciaCliente.getInstancia().buscarCliente(dni);
 				
-				// Se crea la boleta, NECESITO PASARLE UN VECTOR DE CALZADOS
-				// PERO TENGO UN VECTOR DE CALZADOS_VIEW (VER COMO HACER)
-				// Boleta boleta = new Boleta(cliente, Integer.parseInt(montoTotal.getText()), Integer.parseInt(seña.getText()), fecha, calzados);
+					// Fecha de hoy
+					Date fecha = Date.valueOf(LocalDate.now());
 				
-				// if(boleta != null) JOptionPane.showMessageDialog(null, "Boleta generada con éxito");
+					// Se crea la boleta, NECESITO PASARLE UN VECTOR DE CALZADOS
+					// PERO TENGO UN VECTOR DE CALZADOS_VIEW 
+					// Creo el vector que le voy a pasar al constructor de Boleta
+					Vector<Calzado> calzadosConfirmados = new Vector<Calzado>();
+				
+					// Recorro el vector de Calzados_View
+					for(int i = 0; i < calzados.size(); i++) {
+						// Como Calzados_View tiene el idEmpleado como int, lo utilizo
+						// para traer el objeto Empleado (lo necesito para el constructor de Calzado)
+						int idEmpleado = calzados.elementAt(i).getIdEmpleado();
+						Empleado empleado = AdmPersistenciaEmpleado.getInstancia().select(Integer.toString(idEmpleado));
+					
+						// Instancio el calzado con los datos de Calzado_View y los agrego al vector
+						Calzado c = new Calzado(
+								calzados.elementAt(i).getCodigo(),
+								Float.parseFloat(calzados.elementAt(i).getCosto()),
+								empleado,
+								calzados.elementAt(i).getArreglos()
+								);
+						calzadosConfirmados.add(c);
+					}				
+				
+					// Creo la boleta
+					Boleta boleta = new Boleta(cliente, Float.parseFloat(montoTotal.getText()), Float.parseFloat(seña.getText()), fecha, calzadosConfirmados);
+				
+					if(boleta != null) JOptionPane.showMessageDialog(null, "Boleta generada con éxito");
+				}
 			}
 		});
 		btnAceptar.setBounds(226, 379, 89, 23);
@@ -254,12 +283,15 @@ public class ResumenBoleta extends JFrame {
 		
 		DefaultListModel<String> model = new DefaultListModel<>();
 		JList<String> list = new JList<>( model );
-		list.setBounds(94, 191, 326, 111);
+		list.setBounds(74, 191, 346, 111);
 		contentPane.add(list);
 		
 		float total = 0;
 		for ( int i = 0; i < calzados.size(); i++ ){
-		  model.addElement("Código: " + calzados.elementAt(i).getCodigo() + " - $" + calzados.elementAt(i).getCosto() + " - Cant. de arreglos: " + calzados.elementAt(i).getArreglos().size());
+			for(int j = 0; j < calzados.elementAt(i).getArreglos().size(); j++)
+				model.addElement("Código: " + calzados.elementAt(i).getCodigo() + 
+								 " - $" + calzados.elementAt(i).getCosto() + 
+								 " - Arreglos: " + calzados.elementAt(i).getArreglos().elementAt(j).getNombre());
 		  total += Float.parseFloat(calzados.elementAt(i).getCosto());
 		}
 		importe.setText(Float.toString(total));

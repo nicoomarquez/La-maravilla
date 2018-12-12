@@ -145,30 +145,41 @@ public class AdmPersistenciaCalzado implements AdministradorPersistencia<Calzado
 		return calzados;
 	}
 
-	public String getidMaximo(String categoria){	
+	public int getidMaximo(String categoria){	
 		
-		String id="";
+		int id=0;
 		Connection c=PoolConnection.getPoolConnection().getConnection();
 		ResultSet rs;
 		PreparedStatement s;
-		String sql="Select codigoCalzado from "+ db +".Calzado where codigoCalzado like ? order by 1 desc";
+		String sql="Select codigoCalzado from "+db+".Calzado where codigoCalzado like ? order by 1 desc";
 		
 		try{
 			s=c.prepareStatement(sql);
 			s.setString(1, "%" + categoria + "%");
 			rs=s.executeQuery();
 			PoolConnection.getPoolConnection().realeaseConnection(c);
-			if(rs.next()){
-				String codigo=rs.getString(1);
-				int ini=codigo.indexOf(categoria);
-				id=codigo.substring(ini+categoria.length());
+			if(!categoria.equals("Z")){//Si es Z me busca tambien los ZH y ZM
+				if(rs.next()){
+					String codigo=rs.getString(1);
+					
+					id=Integer.parseInt(codigo.substring(categoria.length()));
+				}
+			}
+			else{
+				while(rs.next()){
+					String codigo=rs.getString(1);
+					if(!codigo.contains("M")&&!codigo.contains("H")){
+					
+						id=Integer.parseInt(codigo.substring(categoria.length()));
+						break;
+					}
+				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
 		return id;
-	
 }
 
 	public Vector<Calzado_View> selectAllToView(int idBoleta) {//Funciona
