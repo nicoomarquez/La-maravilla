@@ -1,6 +1,7 @@
 package Negocio;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Vector;
 
 import Persistencia.AdmPersistenciaBoleta;
@@ -32,7 +33,7 @@ public class Boleta {
 		this.fecha = fecha;
 		this.calzados = calzados;
 		this.estadoRetiro = 'P';
-		this.estado=true;
+		this.estado = true;
 		
 		AdmPersistenciaBoleta.getInstancia().insert(this);
 	}

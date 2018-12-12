@@ -1,6 +1,6 @@
 jdbc=jdbc:sqlserver://
-servidor=NB_NICO:1433
-usuario=Hunter
-password=Hunter
+servidor=DESKTOP-U4AVPMM\\SQLEXPRESS:1433
+usuario=Rufus
+password=rufus15
 conexiones=5
 nombreDB=[SARA].[DBO]

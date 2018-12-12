@@ -1,4 +1,4 @@
-package vista;
+package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -33,6 +33,7 @@ import Negocio.Arreglo;
 import Negocio.Calzado;
 import Negocio.Cliente;
 import Negocio.Empleado;
+import Persistencia.AdmPersistenciaEmpleado;
 
 import java.awt.Color;
 import javax.swing.JScrollPane;
@@ -57,6 +58,9 @@ public class InsertarCalzadoBoleta extends JFrame {
 	private static JList<String> list;
 	Vector<Empleado> e;
 	private String categoria;
+	
+	// Se crea el vector en donde se guardarán los calzados agregados
+	private Vector<Calzado> calzados = new Vector<Calzado>();
 	
 	public static InsertarCalzadoBoleta getInstancia() {
 		if(instancia == null)
@@ -159,17 +163,12 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JComboBox<String> empleados = new JComboBox<String>();
 		empleados.setBounds(105, 205, 124, 20);
 		panel.add(empleados);
-		//agrego los empleados al comboBox
+		
+		// Agrego los empleados al comboBox
 		e = SARA.getInstancia().getEmpleados();
 		for(int i = 0; i < e.size(); i++) {
-			empleados.addItem(e.elementAt(i).getNombre()+" "+e.elementAt(i).getApellido());
+			empleados.addItem(e.elementAt(i).getIdEmpleado() + " - " + e.elementAt(i).getNombre()+" "+e.elementAt(i).getApellido());
 		}
-		
-		//traigo de la persistencia
-//		cines = AdmPersistenciaEstablecimiento.getInstancia().select();
-//		for(int i = 0; i < cines.size(); i++) {
-//			establecimientos.addItem(cines.elementAt(i).getNombre());
-//		}
 		
 		JLabel lblCategora = new JLabel("Categor\u00EDa:");
 		lblCategora.setBounds(5, 255, 68, 14);
@@ -204,10 +203,25 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*ResumenBoleta rb = new ResumenBoleta("Hola");
-				rb.setVisible(true);*/
-				System.out.println("Abriendo resumen boleta");
+				
+				// Obtengo el ID del empleado seleccionado
+				String empleado = (String) empleados.getSelectedItem();	
+				String[] id = empleado.split(" ");
+				
+				// Lo busco en la base de datos
+				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
+				
+				//Para crear un calzado necesito: (String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos)
+				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), emp, arreglos);
+				
+				// Agrego el calzado actual
+				calzados.add(calzado);
+				
+				ResumenBoleta rb = new ResumenBoleta(calzados, dni.getText());
+				rb.setVisible(true);
 			}
+
+			
 		});
 		btnGuardar.setBounds(316, 341, 89, 23);
 		panel.add(btnGuardar);
@@ -260,13 +274,27 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JButton btnAgregarOtroCalzado = new JButton("Agregar otro calzado");
 		btnAgregarOtroCalzado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//Se almacenan los datos antes de limpiar la pantalla
+				
+				// Obtengo el ID del empleado seleccionado
+				String empleado = (String) empleados.getSelectedItem();	
+				String[] id = empleado.split(" ");
+				
+				// Lo busco en la base de datos
+				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
+				
 				//Para crear un calzado necesito: (String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos)
-				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), (Empleado)empleados.getSelectedItem(), null);
-				//Se limpia la pantalla para agregar otro calzado
+				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), emp, arreglos);
+				
+				// Agrego el calzado actual
+				calzados.add(calzado);
+				
+				// Se limpia la pantalla para agregar otro calzado
+				limpiarPantalla();
 			}
+
+			
 		});
-		btnAgregarOtroCalzado.setBounds(156, 341, 135, 23);
+		btnAgregarOtroCalzado.setBounds(147, 341, 152, 23);
 		panel.add(btnAgregarOtroCalzado);
 		
 		JSeparator separator_2 = new JSeparator();
@@ -377,5 +405,12 @@ public class InsertarCalzadoBoleta extends JFrame {
 		}
 		model.addElement(resumen);
 		list.setModel(model);
+	}
+	
+	private void limpiarPantalla() {
+		observaciones.setText("");
+		importe.setText("");
+		codigoCalzado.setText("");
+		
 	}
 }
