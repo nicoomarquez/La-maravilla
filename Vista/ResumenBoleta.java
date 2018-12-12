@@ -29,6 +29,8 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ResumenBoleta extends JFrame {
 
@@ -103,7 +105,7 @@ public class ResumenBoleta extends JFrame {
 		nroBoleta.setColumns(10);
 		
 		JLabel lblEnvoADomicilio = new JLabel("Env\u00EDo a domicilio:");
-		lblEnvoADomicilio.setBounds(10, 48, 93, 14);
+		lblEnvoADomicilio.setBounds(10, 48, 122, 14);
 		contentPane.add(lblEnvoADomicilio);
 		
 		JRadioButton rdbtnS = new JRadioButton("S\u00ED");
@@ -115,7 +117,7 @@ public class ResumenBoleta extends JFrame {
 		contentPane.add(rdbtnNo);
 		
 		JLabel lblDisponibilidad = new JLabel("Disponibilidad:");
-		lblDisponibilidad.setBounds(10, 84, 78, 14);
+		lblDisponibilidad.setBounds(10, 84, 92, 14);
 		contentPane.add(lblDisponibilidad);
 		
 		JCheckBox chckbxLunes = new JCheckBox("Lunes");
@@ -173,11 +175,6 @@ public class ResumenBoleta extends JFrame {
 		contentPane.add(montoTotal);
 		montoTotal.setColumns(10);
 		
-		// Calculo del monto total
-//		int senia = Integer.parseInt(seña.getText());
-//		int mtotal = Integer.parseInt(importe.getText()) - senia;
-//		montoTotal.setText(Integer.toString(mtotal));
-		
 		JLabel label = new JLabel("$");
 		label.setBounds(83, 326, 20, 14);
 		contentPane.add(label);
@@ -195,6 +192,14 @@ public class ResumenBoleta extends JFrame {
 		contentPane.add(label_2);
 		
 		seña = new JTextField();
+		seña.addKeyListener(new KeyAdapter() {
+			@Override
+			// Calcular el monto total según la seña que se ingresa
+			public void keyReleased(KeyEvent arg0) {
+				int res = Integer.parseInt(importe.getText()) - Integer.parseInt(seña.getText());
+				montoTotal.setText(Integer.toString(res));
+			}
+		});
 		seña.setBounds(284, 323, 58, 20);
 		contentPane.add(seña);
 		seña.setColumns(10);
@@ -232,14 +237,12 @@ public class ResumenBoleta extends JFrame {
 				Cliente cliente = AdmPersistenciaCliente.getInstancia().buscarCliente(dni);
 				
 				// Fecha de hoy
-				
 				Date fecha = Date.valueOf(LocalDate.now());
-				System.out.println(fecha);
 				
 				// Se crea la boleta
 				Boleta boleta = new Boleta(cliente, Integer.parseInt(montoTotal.getText()), Integer.parseInt(seña.getText()), fecha, calzados);
 				
-				JOptionPane.showMessageDialog(null, "Boleta generada con éxito");
+				if(boleta != null) JOptionPane.showMessageDialog(null, "Boleta generada con éxito");
 			}
 		});
 		btnAceptar.setBounds(226, 379, 89, 23);
@@ -249,7 +252,7 @@ public class ResumenBoleta extends JFrame {
 		
 		DefaultListModel<String> model = new DefaultListModel<>();
 		JList<String> list = new JList<>( model );
-		list.setBounds(66, 190, 326, 111);
+		list.setBounds(94, 191, 326, 111);
 		contentPane.add(list);
 		
 		int total = 0;

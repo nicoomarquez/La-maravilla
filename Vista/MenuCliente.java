@@ -108,20 +108,22 @@ public class MenuCliente extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(dni.getText().isEmpty())
 					JOptionPane.showMessageDialog(null, "Ingrese un DNI para continuar");
-				Cliente cliente =  SARA.getInstancia().buscarCliente(dni.getText());
-				if( cliente != null) {
-					panel.setVisible(true);
-					nombre.setText(cliente.getNombre());
-					apellido.setText(cliente.getApellido());
-					mail.setText(cliente.getMail());
-					domicilio.setText(cliente.getDomicilio());
-					localidad.setText(cliente.getLocalidad());
-					codigoPostal.setText(cliente.getCodigoPostal());
-					btnEliminar.setEnabled(true);
-					btnModificar.setEnabled(true);
+				else {
+					Cliente cliente =  SARA.getInstancia().buscarCliente(dni.getText());
+					if( cliente != null) {
+						panel.setVisible(true);
+						nombre.setText(cliente.getNombre());
+						apellido.setText(cliente.getApellido());
+						mail.setText(cliente.getMail());
+						domicilio.setText(cliente.getDomicilio());
+						localidad.setText(cliente.getLocalidad());
+						codigoPostal.setText(cliente.getCodigoPostal());
+						btnEliminar.setEnabled(true);
+						btnModificar.setEnabled(true);
+					}
+					else
+						JOptionPane.showMessageDialog(null, "No existe cliente con el DNI ingresado");
 				}
-				else
-					JOptionPane.showMessageDialog(null, "No existe cliente con el DNI ingresado");
 			}
 		});
 		
