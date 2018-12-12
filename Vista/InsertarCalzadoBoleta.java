@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.Vector;
@@ -32,6 +33,7 @@ import Negocio.Arreglo;
 import Negocio.Calzado;
 import Negocio.Cliente;
 import Negocio.Empleado;
+import Persistencia.AdmPersistenciaEmpleado;
 
 import java.awt.Color;
 import javax.swing.JScrollPane;
@@ -49,12 +51,16 @@ public class InsertarCalzadoBoleta extends JFrame {
 	private JTextField dni;
 	private JTextField observaciones;
 	private JTextField codigoCalzado;
-	private JTextField importe;
+	private static JTextField importe;
 	private static InsertarCalzadoBoleta instancia;
 	private ButtonGroup botones = new ButtonGroup();
-	Vector<Arreglo> arreglos;
+	private static Vector<Arreglo> arreglos;
+	private static JList<String> list;
 	Vector<Empleado> e;
 	private String categoria;
+	
+	// Se crea el vector en donde se guardarán los calzados agregados
+	private Vector<Calzado> calzados = new Vector<Calzado>();
 	
 	public static InsertarCalzadoBoleta getInstancia() {
 		if(instancia == null)
@@ -134,6 +140,9 @@ public class InsertarCalzadoBoleta extends JFrame {
 		lblArreglos.setBounds(5, 19, 55, 14);
 		panel.add(lblArreglos);
 		
+		//Le pido al controlador que me de los arreglos
+		arreglos=SARA.getInstancia().getArreglos();
+		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(5, 186, 436, 1);
 		panel.add(separator_1);
@@ -151,20 +160,15 @@ public class InsertarCalzadoBoleta extends JFrame {
 		lblEmpleado.setBounds(5, 208, 68, 14);
 		panel.add(lblEmpleado);
 		
-		JComboBox empleados = new JComboBox();
+		JComboBox<String> empleados = new JComboBox<String>();
 		empleados.setBounds(105, 205, 124, 20);
 		panel.add(empleados);
-		//agrego los empleados al comboBox
+		
+		// Agrego los empleados al comboBox
 		e = SARA.getInstancia().getEmpleados();
 		for(int i = 0; i < e.size(); i++) {
-			empleados.addItem(e.elementAt(i).getNombre()+" "+e.elementAt(i).getApellido());
+			empleados.addItem(e.elementAt(i).getIdEmpleado() + " - " + e.elementAt(i).getNombre()+" "+e.elementAt(i).getApellido());
 		}
-		
-		//traigo de la persistencia
-//		cines = AdmPersistenciaEstablecimiento.getInstancia().select();
-//		for(int i = 0; i < cines.size(); i++) {
-//			establecimientos.addItem(cines.elementAt(i).getNombre());
-//		}
 		
 		JLabel lblCategora = new JLabel("Categor\u00EDa:");
 		lblCategora.setBounds(5, 255, 68, 14);
@@ -186,7 +190,8 @@ public class InsertarCalzadoBoleta extends JFrame {
 		panel.add(lblImporte);
 		
 		importe = new JTextField();
-		importe.setText("270,00");
+		importe.setText("00.0");
+		//importe.setText(sumarArreglos());
 		importe.setBounds(87, 292, 86, 20);
 		panel.add(importe);
 		importe.setColumns(10);
@@ -198,10 +203,25 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ResumenBoleta rb = new ResumenBoleta("Hola");
+				
+				// Obtengo el ID del empleado seleccionado
+				String empleado = (String) empleados.getSelectedItem();	
+				String[] id = empleado.split(" ");
+				
+				// Lo busco en la base de datos
+				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
+				
+				//Para crear un calzado necesito: (String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos)
+				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), emp, arreglos);
+				
+				// Agrego el calzado actual
+				calzados.add(calzado);
+				
+				ResumenBoleta rb = new ResumenBoleta(calzados, dni.getText());
 				rb.setVisible(true);
-			
 			}
+
+			
 		});
 		btnGuardar.setBounds(316, 341, 89, 23);
 		panel.add(btnGuardar);
@@ -229,8 +249,8 @@ public class InsertarCalzadoBoleta extends JFrame {
 					JOptionPane.showMessageDialog(null, "El DNI ingresado no se encuentra registrado");
 				}
 				//Obtengo el cliente con el dni ingresado
-				else if(SARA.getInstancia().dniRepetido(dni.getText())){
-					panel.setVisible(true);
+				else {
+					
 					//Cliente cliente = SARA.getInstancia().buscarCliente(dni.getText());
 //					if(botonNo.isSelected()) {
 //						lblNewLabel.setEnabled(false);
@@ -242,6 +262,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 //						lblHorario.setEnabled(false);
 //						horario1.setEnabled(false);
 //						horario2.setEnabled(false);
+						panel.setVisible(true);
 //					}
 				}
 				
@@ -253,13 +274,27 @@ public class InsertarCalzadoBoleta extends JFrame {
 		JButton btnAgregarOtroCalzado = new JButton("Agregar otro calzado");
 		btnAgregarOtroCalzado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//Se almacenan los datos antes de limpiar la pantalla
-				//Para crear un calzado necesito: el código, costo(importe), empleado, los arreglos y la categoria
-				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), (Empleado)empleados.getSelectedItem(), null, categoria);
-				//Se limpia la pantalla para agregar otro calzado
+				
+				// Obtengo el ID del empleado seleccionado
+				String empleado = (String) empleados.getSelectedItem();	
+				String[] id = empleado.split(" ");
+				
+				// Lo busco en la base de datos
+				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
+				
+				//Para crear un calzado necesito: (String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos)
+				Calzado calzado = new Calzado(codigoCalzado.getText(), Float.parseFloat(importe.getText()), emp, arreglos);
+				
+				// Agrego el calzado actual
+				calzados.add(calzado);
+				
+				// Se limpia la pantalla para agregar otro calzado
+				limpiarPantalla();
 			}
+
+			
 		});
-		btnAgregarOtroCalzado.setBounds(156, 341, 135, 23);
+		btnAgregarOtroCalzado.setBounds(147, 341, 152, 23);
 		panel.add(btnAgregarOtroCalzado);
 		
 		JSeparator separator_2 = new JSeparator();
@@ -270,12 +305,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 		separator.setBounds(14, 7, 415, 1);
 		panel.add(separator);
 		
-		DefaultListModel<String> model = new DefaultListModel<>();
-		//agrego los arreglos a la lista
-		arreglos = SARA.getInstancia().getArreglos();
-		for(int i = 0; i < arreglos.size(); i++) {
-			model.addElement(arreglos.elementAt(i).getDescripcion());
-		}
+		
 		
 		JRadioButton rdbtnBota = new JRadioButton("Bota");
 		//Acción que se realiza cuando se selecciona el botón
@@ -324,9 +354,63 @@ public class InsertarCalzadoBoleta extends JFrame {
 		rdbtnZapatoMujer.setBounds(353, 251, 109, 23);
 		panel.add(rdbtnZapatoMujer);
 		
-		JList list = new JList();
-		list.setBounds(59, 18, 382, 101);
+		 list = new JList<String>();
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setBounds(38, 62, 382, 38);
+		list.setEnabled(false);
 		panel.add(list);
+		
+		JButton btnSeleccionarArreglos = new JButton("Seleccionar arreglos");
+		btnSeleccionarArreglos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JListEjemplo j=new JListEjemplo();
+				j.setVisible(true);
+				j.setLocationRelativeTo(null);
+			}
+		});
+		btnSeleccionarArreglos.setBounds(70, 15, 221, 23);
+		panel.add(btnSeleccionarArreglos);
+		
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(37, 60, 383, 40);
+		panel.add(scrollPane);
+		
+	}
+	
+	private static float sumarArreglos(){
+		float total=0;
+		
+		for(Arreglo r:arreglos)
+			total+=r.getCostoArreglo();
+		
+		return total;
+	}
+
+	public static void setArreglos(Vector<Arreglo> arreglosSeleccionados) {
+		// TODO Auto-generated method stub
+		arreglos=arreglosSeleccionados;
+		float total=sumarArreglos();
+		
+		importe.setText(String.valueOf(total));
+		
+		
+		DefaultListModel<String> model = new DefaultListModel<String>();
+		Arreglo r;
+		String resumen = arreglos.elementAt(0).getNombre();
+		for(int i= 1;i< arreglos.size();i++) {
+			r=arreglos.elementAt(i);
+			
+			resumen=resumen+", "+r.getNombre();
+		}
+		model.addElement(resumen);
+		list.setModel(model);
+	}
+	
+	private void limpiarPantalla() {
+		observaciones.setText("");
+		importe.setText("");
+		codigoCalzado.setText("");
 		
 	}
 }

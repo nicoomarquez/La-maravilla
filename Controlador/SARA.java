@@ -3,7 +3,11 @@ package Controlador;
 import java.util.Vector;
 
 import Negocio.*;
+import Persistencia.AdmPersistenciaArreglo;
+import Persistencia.AdmPersistenciaBoleta;
 import Persistencia.AdmPersistenciaCliente;
+import Persistencia.AdmPersistenciaEmpleado;
+import View.Boleta_View;
 
 public class SARA {
 private static SARA instancia=null;
@@ -16,19 +20,33 @@ private static int codigoCalzado;
 
 	private SARA() {
 		// TODO Auto-generated constructor stub
-		empleados =	new Vector<Empleado>();
+		iniciarTodosLosAutoNumericos();
+		empleados =	(Vector<Empleado>) AdmPersistenciaEmpleado.getInstancia().selectAll();
 		boletas  =	new Vector<Boleta>();
 		clientes =	new Vector<Cliente>();
-		arreglos = new Vector<Arreglo>();
-		Arreglo a = new Arreglo("Suela rota", "Reparacion de suelas de zapatos para hombre", 90);
+		arreglos = (Vector<Arreglo>) AdmPersistenciaArreglo.getInstancia().selectAll();
+		/*Arreglo a = new Arreglo("Suela rota", "Reparacion de suelas de zapatos para hombre", 90);
 		Arreglo b = new Arreglo("Suela limpia", "Reparacion de suelas de zapatos para mujer", 50);
 		arreglos.add(a);
 		arreglos.add(b);
 		Empleado e = new Empleado("Luis", "Martinez", "San Juan 154", "20145785", "CABA", "11111111", "2-4548412-5");
 		empleados.add(e);
 		Empleado e1 = new Empleado("Jose", "Gomez", "San Juan 154", "20145785", "CABA", "11111111", "2-4548412-5");
-		empleados.add(e1);
+		empleados.add(e1);*/
 		administrador = new Administrador();
+	}
+
+	private void iniciarTodosLosAutoNumericos() {
+		// TODO Auto-generated method stub
+		int boletaMax=AdmPersistenciaBoleta.getInstancia().getIdMaximo();
+		int clienteMax=AdmPersistenciaCliente.getInstancia().getIdMaximo();
+		int empleadoMax=AdmPersistenciaEmpleado.getInstancia().getIdMaximo();
+		int arregloMax=AdmPersistenciaArreglo.getInstancia().getIdMaximo();
+		
+		Boleta.iniciarAutoNumerico(boletaMax);
+		Cliente.iniciarAutoNumerico(clienteMax);
+		Empleado.iniciarAutoNumerico(empleadoMax);
+		Arreglo.iniciarAutoNumerico(arregloMax);
 	}
 
 	public Vector<Empleado> getEmpleados() {
@@ -114,7 +132,7 @@ private static int codigoCalzado;
 		Cliente clienteNuevo = new Cliente(nombre, apellido, dni, mail, domicilio, localidad, codigoPostal);
 		clientes.add(clienteNuevo);
 		//inserto en la base de datos
-		clienteNuevo.insertarCliente(clienteNuevo);		
+		//clienteNuevo.insertarCliente(clienteNuevo); -> se hace en el constructor de cliente		
 	}
 
 	public Cliente buscarCliente(String dniIngresado) {
@@ -125,8 +143,8 @@ private static int codigoCalzado;
 		}
 		//busco en la base de datos
 		Cliente c = AdmPersistenciaCliente.getInstancia().buscarCliente(dniIngresado);
-		if (c != null) return c;
-		return null;
+		if (c != null) clientes.add(c);
+		return c;
 	}
 	
 	private static int getProximoNumero() {
@@ -135,19 +153,47 @@ private static int codigoCalzado;
 
 	public static String getCodigoBota() {
 		String codigo = Integer.toString(getProximoNumero()-1);
-		return 'B'+ codigo;
+		return "B00"+ codigo;
 	}
 	public static String getCodigoZapatilla() {
 		String codigo = Integer.toString(getProximoNumero()-1);
-		return 'Z'+ codigo;
+		return "Z00"+ codigo;
 	}
 	public static String getCodigoZapatoHombre() {
 		String codigo = Integer.toString(getProximoNumero()-1);
-		return "ZH"+ codigo;
+		return "ZH00"+ codigo;
 	}
 	public static String getCodigoZapatoMujer() {
 		String codigo = Integer.toString(getProximoNumero()-1);
-		return "ZM"+ codigo;
+		return "ZM00"+ codigo;
 	}
 	
+	public Empleado buscarEmpleado(int idEmpleado) {
+		//busco en memoria
+		for(int i = 0; i < empleados.size(); i++) {
+			if(empleados.elementAt(i).getIdEmpleado()==idEmpleado)
+				return empleados.elementAt(i);
+		}
+		//busco en la base de datos
+		Empleado e = AdmPersistenciaEmpleado.getInstancia().select(String.valueOf(idEmpleado));
+		if (e != null) empleados.add(e);
+		return e;
+	}
+
+	public Boleta buscarBoleta(int idBoleta){
+		Boleta boleta=null;
+		for(Boleta b:boletas)
+			if(b.getIdBoleta()==(idBoleta))
+				return b;
+			
+		boleta=AdmPersistenciaBoleta.getInstancia().select(String.valueOf(boleta));
+		if(boleta!=null) boletas.add(boleta);
+		
+		return boleta;
+	}
+	
+	public Vector<Boleta_View> obtenerBoletasDeCliente(String dniCliente){
+		Vector<Boleta_View> boletasCliente=AdmPersistenciaBoleta.getInstancia().buscarBoletasCliente(dniCliente);
+		return boletasCliente;
+	}
 }

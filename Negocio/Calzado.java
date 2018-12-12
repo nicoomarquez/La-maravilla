@@ -2,28 +2,30 @@ package Negocio;
 
 import java.util.Vector;
 
+import Persistencia.AdmPersistenciaCalzado;
+import View.Calzado_View;
+
 public class Calzado {
 	private String codigoCalzado;
 	private Vector<Arreglo> arreglos;
 	private float costoCalzado;
 	private Empleado empleado;
 	private char estado;
-	private String categoria; //Z, ZM, ZH y B
 	
 	public Calzado(){
 		arreglos = new Vector<Arreglo>();
 		empleado = new Empleado();		
 	}
 	
-	public Calzado(String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos, String categoria) {
+	public Calzado(String codigoCalzado, float costoCalzado, Empleado empleado, Vector<Arreglo> arreglos) {
 		super();
 		this.codigoCalzado = codigoCalzado;
 		this.costoCalzado = costoCalzado;
 		this.empleado = empleado;
 		this.arreglos = arreglos;
 		this.estado = 'P';//estado pendiente
-		this.categoria = categoria;
 		/*Se inserta en la BD*/
+		AdmPersistenciaCalzado.getInstancia().insert(this);
 	}
 
 	public String getCodigoCalzado() {
@@ -66,7 +68,16 @@ public class Calzado {
 		this.estado=e;
 	}
 
-	public String getCategoria() {
-		return categoria;
+	public void update(){
+		AdmPersistenciaCalzado.getInstancia().update(this);
+	}
+	
+	public void delete(){
+		AdmPersistenciaCalzado.getInstancia().delete(this);
+	}
+
+	public Calzado_View toView() {
+		// TODO Auto-generated method stub
+		return new Calzado_View(codigoCalzado,codigoCalzado.substring(0, 2),String.valueOf(costoCalzado),estado,empleado.getIdEmpleado(),arreglos);
 	}
 }

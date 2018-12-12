@@ -1,17 +1,21 @@
 package Vista;
 
-import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
+import Controlador.SARA;
+import View.Boleta_View;
+import javax.swing.DefaultComboBoxModel;
 
 public class Boletas extends JFrame {
 
@@ -27,6 +31,8 @@ public class Boletas extends JFrame {
 	private JButton btnVerBoleta;
 	private JButton btnAtras;
 	private static Boletas instancia;
+	private JComboBox<String> comboBoxBoletas;
+	private Vector<Boleta_View>bv;
 	/**
 	 * Launch the application.
 	 */
@@ -60,6 +66,14 @@ public class Boletas extends JFrame {
 		btnNewBuscar = new JButton("Buscar");
 		btnNewBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				bv=SARA.getInstancia().obtenerBoletasDeCliente(textFieldDni.getText());
+				
+				DefaultComboBoxModel<String> df=new DefaultComboBoxModel<String>();
+				for(Boleta_View b:bv){
+					df.addElement(b.toString());
+				}
+				comboBoxBoletas.setModel(df);
+				
 				panel.setVisible(true);
 				
 			}
@@ -77,11 +91,18 @@ public class Boletas extends JFrame {
 		lblBoletas.setBounds(10, 11, 59, 14);
 		panel.add(lblBoletas);
 		
-		JComboBox<String> comboBoxBoletas = new JComboBox<String>();
+		comboBoxBoletas = new JComboBox<String>();
 		comboBoxBoletas.setBounds(72, 8, 186, 20);
 		panel.add(comboBoxBoletas);
 		
 		btnVerBoleta = new JButton("Ver boleta");
+		btnVerBoleta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int pos=comboBoxBoletas.getSelectedIndex();
+				if(pos>-1)
+					System.out.print("Mostrando resumen de boleta");
+			}
+		});
 		btnVerBoleta.setBounds(223, 117, 117, 33);
 		panel.add(btnVerBoleta);
 		

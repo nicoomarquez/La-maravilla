@@ -1,6 +1,3 @@
-/**
- * 
- */
 package Persistencia;
 
 import java.io.FileInputStream;
@@ -10,11 +7,9 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Vector;
 
-/**
- * @author Santiago
- *
- */
-public class PoolConnection {
+/**Esta clase maneja la cantidad de conexiones simultaneas a un sistema*/
+public class PoolConnection
+{
 	private Vector <Connection> connections = new Vector<Connection>();
 	protected String jdbc;
 	protected String servidor;
@@ -22,6 +17,9 @@ public class PoolConnection {
 	protected String password;
 	protected int cantCon;
 	private static PoolConnection pool;
+	private static String nameDB;
+	
+	
 	private PoolConnection()
 	{
 		getConfiguration();
@@ -39,7 +37,6 @@ public class PoolConnection {
 	{
 		try
 		{
-			//Setear driver
 			  Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String dbConnectString = jdbc + servidor; 
             Connection con = DriverManager.getConnection (dbConnectString, usuario, password);
@@ -63,21 +60,20 @@ public class PoolConnection {
 	{
 		String configuracion = "ConfigBD.txt";
 	    Properties propiedades;
-	 
-	    // Carga del fichero de propiedades 
+	    
 	    try 
 	    {
-	       FileInputStream f = new FileInputStream(configuracion);	 
+	       FileInputStream f = new FileInputStream(configuracion);
 	       propiedades = new Properties();
 	       propiedades.load(f);
 	       f.close();
 	 
-       // Leo los valores de configuracion
 	       jdbc = propiedades.getProperty("jdbc"); 
 	       servidor = propiedades.getProperty("servidor");
 	       usuario = propiedades.getProperty("usuario");
 	       password = propiedades.getProperty("password");
 	       cantCon = Integer.parseInt(propiedades.getProperty("conexiones"));
+	       nameDB= propiedades.getProperty("nombreDB");
 	     } 
 	    catch (Exception e) 
 	     {
@@ -115,5 +111,9 @@ public class PoolConnection {
 	public void realeaseConnection(Connection c)
 	{
 		connections.add(c);
+	}
+	
+	public  String getNameDB(){
+		return nameDB;
 	}
 }
