@@ -11,8 +11,10 @@ import javax.swing.border.EmptyBorder;
 import Negocio.Boleta;
 import Negocio.Calzado;
 import Negocio.Cliente;
+import Negocio.Empleado;
 import Persistencia.AdmPersistenciaBoleta;
 import Persistencia.AdmPersistenciaCliente;
+import Persistencia.AdmPersistenciaEmpleado;
 import View.Calzado_View;
 
 import javax.swing.JLabel;
@@ -32,6 +34,8 @@ import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.ButtonGroup;
+import javax.swing.JScrollPane;
 
 public class ResumenBoleta extends JFrame {
 
@@ -42,6 +46,8 @@ public class ResumenBoleta extends JFrame {
 	private JTextField montoTotal;
 	private JTextField seña;
 	private static ResumenBoleta instancia;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JPanel contentPane2;
 	
 	public static ResumenBoleta getInstancia() {
 		Vector<Calzado_View> calzados = new Vector<Calzado_View>();
@@ -75,12 +81,20 @@ public class ResumenBoleta extends JFrame {
 	 * @param dni 
 	 */
 	public ResumenBoleta(Vector<Calzado_View> calzados, String dni) {
+		
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 450);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		contentPane2 = new JPanel();
+		contentPane2.setBounds(10, 73, 389, 91);
+		contentPane2.setVisible(false);
+		contentPane.add(contentPane2);
 		
 		JLabel lblCliente = new JLabel("CLIENTE:");
 		lblCliente.setBounds(10, 11, 67, 14);
@@ -110,48 +124,61 @@ public class ResumenBoleta extends JFrame {
 		contentPane.add(lblEnvoADomicilio);
 		
 		JRadioButton rdbtnS = new JRadioButton("S\u00ED");
+		rdbtnS.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				contentPane2.setVisible(true);
+			}
+		});
+		buttonGroup.add(rdbtnS);
 		rdbtnS.setBounds(138, 44, 109, 23);
 		contentPane.add(rdbtnS);
 		
 		JRadioButton rdbtnNo = new JRadioButton("No");
+		rdbtnNo.setSelected(true);
+		rdbtnNo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				contentPane2.setVisible(false);
+			}
+		});
+		buttonGroup.add(rdbtnNo);
 		rdbtnNo.setBounds(256, 44, 109, 23);
 		contentPane.add(rdbtnNo);
 		
 		JLabel lblDisponibilidad = new JLabel("Disponibilidad:");
 		lblDisponibilidad.setBounds(10, 84, 92, 14);
-		contentPane.add(lblDisponibilidad);
+		contentPane2.add(lblDisponibilidad);
 		
 		JCheckBox chckbxLunes = new JCheckBox("Lunes");
 		chckbxLunes.setBounds(108, 80, 78, 23);
-		contentPane.add(chckbxLunes);
+		contentPane2.add(chckbxLunes);
 		
 		JCheckBox chckbxMartes = new JCheckBox("Martes");
 		chckbxMartes.setBounds(199, 80, 78, 23);
-		contentPane.add(chckbxMartes);
+		contentPane2.add(chckbxMartes);
 		
 		JCheckBox chckbxMircoles = new JCheckBox("Mi\u00E9rcoles");
 		chckbxMircoles.setBounds(298, 80, 97, 23);
-		contentPane.add(chckbxMircoles);
+		contentPane2.add(chckbxMircoles);
 		
 		JCheckBox chckbxJueves = new JCheckBox("Jueves");
 		chckbxJueves.setBounds(138, 106, 78, 23);
-		contentPane.add(chckbxJueves);
+		contentPane2.add(chckbxJueves);
 		
 		JCheckBox chckbxViernes = new JCheckBox("Viernes");
 		chckbxViernes.setBounds(237, 106, 78, 23);
-		contentPane.add(chckbxViernes);
+		contentPane2.add(chckbxViernes);
 		
 		JLabel lblHorario = new JLabel("Horario:");
 		lblHorario.setBounds(10, 142, 46, 14);
-		contentPane.add(lblHorario);
+		contentPane2.add(lblHorario);
 		
 		JCheckBox checkBox = new JCheckBox("10:00 - 13:00");
 		checkBox.setBounds(89, 138, 97, 23);
-		contentPane.add(checkBox);
+		contentPane2.add(checkBox);
 		
 		JCheckBox checkBox_1 = new JCheckBox("16:00 - 19:00");
 		checkBox_1.setBounds(227, 138, 97, 23);
-		contentPane.add(checkBox_1);
+		contentPane2.add(checkBox_1);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 177, 410, 2);
@@ -172,6 +199,7 @@ public class ResumenBoleta extends JFrame {
 		importe.setColumns(10);
 		
 		montoTotal = new JTextField();
+		montoTotal.setEditable(false);
 		montoTotal.setBounds(115, 348, 58, 20);
 		contentPane.add(montoTotal);
 		montoTotal.setColumns(10);
@@ -225,8 +253,7 @@ public class ResumenBoleta extends JFrame {
 		contentPane.add(btnAtrs);
 		
 		// Retomo en el último autonumérico
-		int idBoleta = AdmPersistenciaBoleta.getInstancia().getIdMaximo();
-		Boleta.iniciarAutoNumerico(idBoleta);
+		int idBoleta = AdmPersistenciaBoleta.getInstancia().getIdMaximo()+1;
 		// Se muestra cual sería el nroBoleta pero todavía no se creó
 		nroBoleta.setText(Integer.toString(idBoleta + 1));
 		
@@ -234,17 +261,49 @@ public class ResumenBoleta extends JFrame {
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				// Para crear un boleta, necesito el cliente, lo consigo con el dni
-				Cliente cliente = AdmPersistenciaCliente.getInstancia().buscarCliente(dni);
+				if(seña.getText().isEmpty() || importe.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Ingrese seña y/o monto para continuar");
+				}
+				else {
 				
-				// Fecha de hoy
-				Date fecha = Date.valueOf(LocalDate.now());
+					// Para crear un boleta, necesito el cliente, lo consigo con el dni
+					Cliente cliente = AdmPersistenciaCliente.getInstancia().buscarCliente(dni);
 				
-				// Se crea la boleta, NECESITO PASARLE UN VECTOR DE CALZADOS
-				// PERO TENGO UN VECTOR DE CALZADOS_VIEW (VER COMO HACER)
-				// Boleta boleta = new Boleta(cliente, Integer.parseInt(montoTotal.getText()), Integer.parseInt(seña.getText()), fecha, calzados);
+					// Fecha de hoy
+					Date fecha = Date.valueOf(LocalDate.now());
 				
-				// if(boleta != null) JOptionPane.showMessageDialog(null, "Boleta generada con éxito");
+					// Se crea la boleta, NECESITO PASARLE UN VECTOR DE CALZADOS
+					// PERO TENGO UN VECTOR DE CALZADOS_VIEW 
+					// Creo el vector que le voy a pasar al constructor de Boleta
+					Vector<Calzado> calzadosConfirmados = new Vector<Calzado>();
+				
+					// Recorro el vector de Calzados_View
+					for(int i = 0; i < calzados.size(); i++) {
+						// Como Calzados_View tiene el idEmpleado como int, lo utilizo
+						// para traer el objeto Empleado (lo necesito para el constructor de Calzado)
+						int idEmpleado = calzados.elementAt(i).getIdEmpleado();
+						Empleado empleado = AdmPersistenciaEmpleado.getInstancia().select(Integer.toString(idEmpleado));
+					
+						// Instancio el calzado con los datos de Calzado_View y los agrego al vector
+						Calzado c = new Calzado(
+								calzados.elementAt(i).getCodigo(),
+								Float.parseFloat(calzados.elementAt(i).getCosto()),
+								empleado,
+								calzados.elementAt(i).getArreglos()
+								);
+						calzadosConfirmados.add(c);
+					}				
+				
+					// Creo la boleta
+					Boleta boleta = new Boleta(cliente, Float.parseFloat(montoTotal.getText()), Float.parseFloat(seña.getText()), fecha, calzadosConfirmados);
+				
+					if(boleta != null) { 
+						JOptionPane.showMessageDialog(null, "Boleta generada con éxito");
+						dispose(); 
+						Menu.getInstancia().setVisible(true);
+						Menu.getInstancia().setLocationRelativeTo(null);
+					}
+				}
 			}
 		});
 		btnAceptar.setBounds(226, 379, 89, 23);
@@ -254,15 +313,25 @@ public class ResumenBoleta extends JFrame {
 		
 		DefaultListModel<String> model = new DefaultListModel<>();
 		JList<String> list = new JList<>( model );
-		list.setBounds(94, 191, 326, 111);
+		list.setBounds(74, 191, 346, 111);
 		contentPane.add(list);
 		
 		float total = 0;
+		String datos="";
 		for ( int i = 0; i < calzados.size(); i++ ){
-		  model.addElement("Código: " + calzados.elementAt(i).getCodigo() + " - $" + calzados.elementAt(i).getCosto() + " - Cant. de arreglos: " + calzados.elementAt(i).getArreglos().size());
+			datos="Código: " + calzados.elementAt(i).getCodigo()+"- Arreglos: " ;
+			for(int j = 0; j < calzados.elementAt(i).getArreglos().size(); j++)
+				datos+= calzados.elementAt(i).getArreglos().elementAt(j).getNombre();
 		  total += Float.parseFloat(calzados.elementAt(i).getCosto());
+		  model.addElement(datos);
 		}
 		importe.setText(Float.toString(total));
+		
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setBounds(74, 190, 350, 111);
+		contentPane.add(scrollPane);
+		
+		
 		
 		
 	}

@@ -88,15 +88,16 @@ public class Boletas extends JFrame {
 						// Pregunto si el cliente boletas
 						if(bv.size() == 0) 
 							JOptionPane.showMessageDialog(null, "El cliente no tiene boletas para mostrar");
+						else {
+							DefaultComboBoxModel<String> df=new DefaultComboBoxModel<String>();
+							for(Boleta_View b:bv){
+								df.addElement(b.toString());
+							}
+							comboBoxBoletas.setModel(df);
 					
-						DefaultComboBoxModel<String> df=new DefaultComboBoxModel<String>();
-						for(Boleta_View b:bv){
-							df.addElement(b.toString());
+							panel.setVisible(true);
+							btnVerBoleta.setEnabled(true);
 						}
-						comboBoxBoletas.setModel(df);
-				
-						panel.setVisible(true);
-						btnVerBoleta.setEnabled(true);
 					}	
 				}	
 			}
@@ -115,7 +116,7 @@ public class Boletas extends JFrame {
 		panel.add(lblBoletas);
 		
 		comboBoxBoletas = new JComboBox<String>();
-		comboBoxBoletas.setBounds(72, 8, 186, 20);
+		comboBoxBoletas.setBounds(72, 8, 312, 20);
 		panel.add(comboBoxBoletas);
 		
 		btnAtras = new JButton("Atr\u00E1s");

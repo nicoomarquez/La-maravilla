@@ -1,22 +1,24 @@
 package Vista;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import Negocio.Boleta;
-
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JList;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollBar;
+import Negocio.Calzado;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class BoletaCliente extends JFrame {
 
@@ -115,15 +117,19 @@ public class BoletaCliente extends JFrame {
 		
 		DefaultListModel<String> model = new DefaultListModel<>();
 		JList<String> list = new JList<>( model );
-		list.setBounds(106, 118, 302, 165);
+		list.setBounds(75, 118, 349, 165);
 		contentPane.add(list);
-		
+		String dato="";
 		for (int i = 0; i < bol.getCalzados().size(); i++){
+			dato="Código: " + bol.getCalzados().elementAt(i).getCodigoCalzado() +" - $" + bol.getCalzados().elementAt(i).getCostoCalzado() +
+					" - Estado: " + bol.getCalzados().elementAt(i).getEstado();
 			for(int j = 0; j < bol.getCalzados().elementAt(i).getArreglos().size(); j++)
-			model.addElement("Código: " + bol.getCalzados().elementAt(i).getCodigoCalzado() +
-							" - $" + bol.getCalzados().elementAt(i).getCostoCalzado() +
-							" Arreglos: " + bol.getCalzados().elementAt(i).getArreglos().elementAt(j).getNombre() );
+				dato= dato+"\n "+" Arreglos: " + bol.getCalzados().elementAt(i).getArreglos().elementAt(j).getNombre();
+			
+			model.addElement(dato);
 		}
+		
+		
 		
 		JLabel lblSea = new JLabel("Se\u00F1a:");
 		lblSea.setBounds(10, 297, 46, 14);
@@ -155,11 +161,46 @@ public class BoletaCliente extends JFrame {
 				Boletas.getInstancia().setVisible(true);
 			}
 		});
-		btnAtrs.setBounds(171, 336, 89, 23);
+		btnAtrs.setBounds(74, 336, 89, 23);
 		contentPane.add(btnAtrs);
 		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(391, 119, 17, 98);
-		contentPane.add(scrollBar);
+		JButton btnActualizarEstadoCalzado = new JButton("Actualizar estado calzado");
+		btnActualizarEstadoCalzado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int pos=list.getSelectedIndex();
+				if(pos!=-1) {
+					Calzado c=bol.getCalzados().get(pos);
+					boolean continuar=true;
+					String opcion="";
+					do {
+						opcion=JOptionPane.showInputDialog("Ingrese el estado a cambiar: P:pendiente, L:listo, E:entregado");
+						if(!(opcion.equals("P")||opcion.equals("L")||opcion.equals("E"))){
+							JOptionPane.showMessageDialog(null, "Ingrese una opcion correcta");
+						}
+						else
+							continuar=false;
+					}while(continuar);
+					c.setEstado(opcion.charAt(0));
+					c.update();
+					//estan todas en Listo?
+					Vector<Calzado>calzados=bol.getCalzados();
+					boolean actualizarBoleta=true;
+					for(Calzado cal:calzados) {
+						String estado=String.valueOf(cal.getEstado());
+						if(estado.equals("P")) actualizarBoleta=false;
+					}
+					if(actualizarBoleta) { bol.setEstadoRetiro('L'); bol.update();}
+				}
+				
+				else JOptionPane.showMessageDialog(null, "Seleccione un elemento de la lista para continuar");
+			}
+		});
+		btnActualizarEstadoCalzado.setBounds(191, 336, 197, 23);
+		contentPane.add(btnActualizarEstadoCalzado);
+		
+		JScrollPane scrollPane = new JScrollPane(list);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(69, 117, 355, 166);
+		contentPane.add(scrollPane);
 	}
 }

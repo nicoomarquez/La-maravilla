@@ -13,6 +13,9 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class Menu extends JFrame {
 
@@ -57,6 +60,7 @@ public class Menu extends JFrame {
 		btnNewButton.setFont(new Font("Kalinga", Font.BOLD, 12));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dispose();
 				Boletas.getInstancia().setLocationRelativeTo(null);
 				Boletas.getInstancia().setVisible(true);
 			}
@@ -77,16 +81,19 @@ public class Menu extends JFrame {
 		contentPane.add(btnNewButton_1);
 		
 		JButton btnArreglos = new JButton("ARREGLOS");
+		btnArreglos.setEnabled(false);
 		btnArreglos.setFont(new Font("Kalinga", Font.BOLD, 12));
 		btnArreglos.setBounds(72, 109, 130, 23);
 		contentPane.add(btnArreglos);
 		
 		JButton btnEmpleados = new JButton("EMPLEADOS");
+		btnEmpleados.setEnabled(false);
 		btnEmpleados.setFont(new Font("Kalinga", Font.BOLD, 12));
 		btnEmpleados.setBounds(225, 109, 130, 23);
 		contentPane.add(btnEmpleados);
 		
 		JButton btnMail = new JButton("MAIL");
+		btnMail.setEnabled(false);
 		btnMail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -106,5 +113,31 @@ public class Menu extends JFrame {
 		btnNuevaBoleta.setFont(new Font("Kalinga", Font.BOLD, 12));
 		btnNuevaBoleta.setBounds(225, 163, 130, 23);
 		contentPane.add(btnNuevaBoleta);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 424, 23);
+		contentPane.add(menuBar);
+		
+		JMenu mnCuenta = new JMenu("Cuenta");
+		menuBar.add(mnCuenta);
+		
+		JMenuItem mntmCerrarSesion = new JMenuItem("Cerrar sesion");
+		mntmCerrarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+				IniciarSesion.getInstancia().setLocationRelativeTo(null);
+				IniciarSesion.getInstancia().setVisible(true);
+				IniciarSesion.getInstancia().limpiar();
+			}
+		});
+		mnCuenta.add(mntmCerrarSesion);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Salir");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		menuBar.add(mntmNewMenuItem);
 	}
 }
