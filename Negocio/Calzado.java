@@ -81,7 +81,7 @@ public class Calzado {
 
 	public Calzado_View toView() {
 		// TODO Auto-generated method stub
-		return new Calzado_View(codigoCalzado,codigoCalzado.substring(0, 2),String.valueOf(costoCalzado),estado,empleado.getIdEmpleado(),arreglos);
+		return new Calzado_View(codigoCalzado,"",String.valueOf(costoCalzado),estado,empleado.getIdEmpleado(),arreglos);
 	}
 	
 	public static void iniciarAutoNumerico(int nro, String cat){

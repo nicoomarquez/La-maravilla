@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import Controlador.SARA;
 import javax.swing.JPasswordField;
+import java.awt.SystemColor;
 
 public class IniciarSesion extends JFrame {
 
@@ -61,7 +62,7 @@ public class IniciarSesion extends JFrame {
 		setBounds(100, 100, 468, 295);
 		contentPane = new JPanel();
 		contentPane.setForeground(new Color(255, 255, 255));
-		contentPane.setBackground(new Color(0, 255, 153));
+		contentPane.setBackground(SystemColor.menu);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -124,5 +125,11 @@ public class IniciarSesion extends JFrame {
 		passwordField = new JPasswordField();
 		passwordField.setBounds(140, 130, 254, 20);
 		contentPane.add(passwordField);
+	}
+
+	public void limpiar() {
+		// TODO Auto-generated method stub
+		textFieldUsuario.setText("");
+		passwordField.setText("");
 	}
 }

@@ -62,6 +62,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 	private static JList<String> list;
 	Vector<Empleado> e;
 	private String categoria;
+	private static DefaultListModel<String> model;
 	
 	// Se crea el vector en donde se guardarán los calzados agregados
 	private Vector<Calzado_View> calzados = new Vector<Calzado_View>();
@@ -342,23 +343,17 @@ public class InsertarCalzadoBoleta extends JFrame {
 		contentPane.add(btnAtrs);
 		
 		JButton btnAgregarOtroCalzado = new JButton("Agregar otro calzado");
-		btnAgregarOtroCalzado.setEnabled(false);
 		btnAgregarOtroCalzado.setBounds(152, 479, 169, 23);
 		contentPane.add(btnAgregarOtroCalzado);
 		
 		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setEnabled(false);
 		btnGuardar.setBounds(362, 479, 89, 23);
 		contentPane.add(btnGuardar);
 		btnGuardar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e1) {
 				
 				// Obtengo el ID del empleado seleccionado
-				String empleado = (String) empleados.getSelectedItem();	
-				String[] id = empleado.split(" ");
-				
-				// Lo busco en la base de datos
-				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
+				Empleado emp = e.get(empleados.getSelectedIndex());
 				
 				// Creo un calzadoView porque todavía no se inserta en la bd
 				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
@@ -376,15 +371,13 @@ public class InsertarCalzadoBoleta extends JFrame {
 		btnAgregarOtroCalzado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(!rdbtnZapatilla.isSelected() || !rdbtnZapatoMujer.isSelected() || !rdbtnZapatoHombre.isSelected() || !rdbtnBota.isSelected()) {
+				/*if(!rdbtnZapatilla.isSelected() || !rdbtnZapatoMujer.isSelected() || !rdbtnZapatoHombre.isSelected() || !rdbtnBota.isSelected()) {
 					JOptionPane.showMessageDialog(null, "Seleccione una categoria para continuar");
-				}
+				}*/
 				// Obtengo el ID del empleado seleccionado
-				String empleado = (String) empleados.getSelectedItem();	
-				String[] id = empleado.split(" ");
 				
 				// Lo busco en la base de datos
-				Empleado emp = AdmPersistenciaEmpleado.getInstancia().select(id[0]);
+				Empleado emp = e.get(empleados.getSelectedIndex());
 				
 				// Creo un calzadoView porque todavía no se inserta en la bd
 				Calzado_View calzado = new Calzado_View(codigoCalzado.getText(), "",importe.getText(), 'P', emp.getIdEmpleado(), arreglos);
@@ -425,7 +418,7 @@ public class InsertarCalzadoBoleta extends JFrame {
 		importe.setText(String.valueOf(total));
 		
 		
-		DefaultListModel<String> model = new DefaultListModel<String>();
+		model = new DefaultListModel<String>();
 		Arreglo r;
 		String resumen = arreglos.elementAt(0).getNombre();
 		for(int i= 1;i< arreglos.size();i++) {
